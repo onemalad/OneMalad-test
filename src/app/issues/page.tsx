@@ -98,6 +98,11 @@ function IssuesContent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) {
+      toast.error('Please sign in to raise an issue');
+      setModalOpen(false);
+      return;
+    }
     if (!title || !description || !location) {
       toast.error('Please fill in all fields');
       return;
@@ -192,7 +197,13 @@ function IssuesContent() {
               ))}
             </div>
             <button
-              onClick={() => setModalOpen(true)}
+              onClick={() => {
+                if (!user) {
+                  toast.error('Please sign in to raise an issue');
+                  return;
+                }
+                setModalOpen(true);
+              }}
               className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white text-sm font-semibold rounded-lg flex items-center gap-1.5 hover:shadow-md transition-all"
             >
               <HiPlus className="text-lg" /> Raise an Issue
