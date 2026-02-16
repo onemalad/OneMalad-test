@@ -41,20 +41,11 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: 'OneMalad — Malad\'s Civic Engagement Platform',
     description: SITE_DESC,
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'OneMalad - For the People of Malad, Mumbai',
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'OneMalad — Malad\'s Civic Engagement Platform',
     description: SITE_DESC,
-    images: ['/og-image.png'],
     creator: '@OneMalad',
   },
   robots: {

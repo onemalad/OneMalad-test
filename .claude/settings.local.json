@@ -18,7 +18,10 @@
       "WebFetch(domain:www.holidify.com)",
       "WebFetch(domain:www.thrillophilia.com)",
       "WebFetch(domain:www.tripoto.com)",
-      "WebFetch(domain:www.tripadvisor.in)"
+      "WebFetch(domain:www.tripadvisor.in)",
+      "Bash(where:*)",
+      "Bash(npx vercel:*)",
+      "Bash(git add:*)"
     ]
   }
 }
