@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(fuser:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(node node_modules/.bin/next dev:*)",
+      "Bash(node node_modules/next/dist/bin/next dev:*)",
+      "Bash(dir:*)",
+      "Bash(npm run dev:*)",
+      "WebFetch(domain:en.wikipedia.org)",
+      "WebFetch(domain:mumbaitourism.org.in)",
+      "WebFetch(domain:www.trawell.in)",
+      "WebFetch(domain:mumbaitourism.travel)",
+      "WebFetch(domain:www.holidify.com)",
+      "WebFetch(domain:www.thrillophilia.com)",
+      "WebFetch(domain:www.tripoto.com)",
+      "WebFetch(domain:www.tripadvisor.in)"
+    ]
+  }
+}
