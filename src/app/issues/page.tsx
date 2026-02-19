@@ -5,7 +5,6 @@ import { useSearchParams } from 'next/navigation';
 import { HiPlus, HiOutlineLocationMarker, HiOutlineX, HiOutlinePhotograph, HiOutlineCamera } from 'react-icons/hi';
 import { FiCheckCircle, FiClock, FiLoader, FiThumbsUp } from 'react-icons/fi';
 import { useStore } from '@/hooks/useStore';
-import { useAuth } from '@/context/AuthContext';
 import { wardsData, getCorporatorByWard } from '@/data/wards';
 import { IssueCategory, IssueStatus, Issue } from '@/types';
 import { isFirebaseConfigured } from '@/lib/firestore';
@@ -46,9 +45,13 @@ function IssuesContent() {
   const presetWard = searchParams.get('ward');
 
   const { issues, addIssue } = useStore();
-  const { user } = useAuth();
   const [modalOpen, setModalOpen] = useState(showModal);
   const [filter, setFilter] = useState<'all' | IssueStatus>('all');
+
+  // Personal details
+  const [citizenName, setCitizenName] = useState('');
+  const [citizenPhone, setCitizenPhone] = useState('');
+  const [citizenEmail, setCitizenEmail] = useState('');
 
   // Form state
   const [title, setTitle] = useState('');
@@ -59,6 +62,7 @@ function IssuesContent() {
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [showLetter, setShowLetter] = useState<Issue | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
@@ -95,28 +99,35 @@ function IssuesContent() {
   const progressCount = issues.filter((i) => i.status === 'in_progress').length;
   const resolvedCount = issues.filter((i) => i.status === 'resolved').length;
 
+  const generateRefNumber = () => {
+    const now = new Date();
+    return `OM-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}-${Math.floor(1000 + Math.random() * 9000)}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) {
-      toast.error('Please sign in to raise an issue');
-      setModalOpen(false);
+    if (!citizenName.trim() || !citizenPhone.trim()) {
+      toast.error('Please enter your name and phone number');
       return;
     }
     if (!title || !description || !location) {
-      toast.error('Please fill in all fields');
+      toast.error('Please fill in all required fields');
+      return;
+    }
+    if (citizenPhone.length < 10) {
+      toast.error('Please enter a valid phone number');
       return;
     }
 
     setSubmitting(true);
     try {
-      // Upload images to Firebase Storage if configured, else use blob URLs
       let uploadedUrls: string[] = imagePreviews;
       if (isFirebaseConfigured() && imageFiles.length > 0) {
         uploadedUrls = await uploadIssueImages(imageFiles);
       }
 
       const newIssue: Issue = {
-        id: `issue-${Date.now()}`,
+        id: generateRefNumber(),
         title,
         description,
         category,
@@ -124,16 +135,21 @@ function IssuesContent() {
         wardNumber: Number(wardNumber),
         location,
         imageUrls: uploadedUrls,
-        userName: user?.displayName || 'Anonymous User',
-        userEmail: user?.email || 'anonymous@onemalad.in',
+        userName: citizenName.trim(),
+        userEmail: citizenEmail.trim() || '',
+        userPhone: citizenPhone.trim(),
         upvotes: 0,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
 
       addIssue(newIssue);
-      toast.success('Issue raised successfully!');
+      toast.success('Issue raised successfully! Your formal complaint letter has been generated.');
+      setShowLetter(newIssue);
       setModalOpen(false);
+      setCitizenName('');
+      setCitizenPhone('');
+      setCitizenEmail('');
       setTitle('');
       setDescription('');
       setLocation('');
@@ -196,13 +212,7 @@ function IssuesContent() {
               ))}
             </div>
             <button
-              onClick={() => {
-                if (!user) {
-                  toast.error('Please sign in to raise an issue');
-                  return;
-                }
-                setModalOpen(true);
-              }}
+              onClick={() => setModalOpen(true)}
               className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white text-sm font-semibold rounded-lg flex items-center gap-1.5 hover:shadow-md transition-all"
             >
               <HiPlus className="text-lg" /> Raise an Issue
@@ -258,8 +268,16 @@ function IssuesContent() {
                         <HiOutlineLocationMarker /> {issue.location.split(',')[0]}
                       </span>
                     </div>
-                    <div className="flex items-center gap-1 text-xs text-gray-400">
-                      <FiThumbsUp /> {issue.upvotes} upvotes
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => setShowLetter(issue)}
+                        className="text-xs text-blue-600 font-medium hover:underline"
+                      >
+                        View Letter
+                      </button>
+                      <span className="flex items-center gap-1 text-xs text-gray-400">
+                        <FiThumbsUp /> {issue.upvotes} upvotes
+                      </span>
                     </div>
                   </div>
 
@@ -310,6 +328,46 @@ function IssuesContent() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Personal Details */}
+              <div className="bg-gray-50 rounded-xl p-4 space-y-4">
+                <p className="text-sm font-semibold text-gray-700">Your Details</p>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name *</label>
+                  <input
+                    type="text"
+                    value={citizenName}
+                    onChange={(e) => setCitizenName(e.target.value)}
+                    placeholder="Enter your full name"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                    required
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone *</label>
+                    <input
+                      type="tel"
+                      value={citizenPhone}
+                      onChange={(e) => setCitizenPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                      placeholder="10-digit number"
+                      className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Email (optional)</label>
+                    <input
+                      type="email"
+                      value={citizenEmail}
+                      onChange={(e) => setCitizenEmail(e.target.value)}
+                      placeholder="your@email.com"
+                      className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Issue Details */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Ward</label>
                 <select
@@ -446,6 +504,103 @@ function IssuesContent() {
           </div>
         </div>
       )}
+      {/* Formal Complaint Letter Modal */}
+      {showLetter && (() => {
+        const corp = getCorporatorByWard(showLetter.wardNumber);
+        const date = new Date(showLetter.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+        return (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+              <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                <h2 className="text-lg font-bold text-gray-800">Formal Complaint Letter</h2>
+                <button onClick={() => setShowLetter(null)} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
+                  <HiOutlineX className="text-xl text-gray-500" />
+                </button>
+              </div>
+              <div className="p-6 sm:p-8 font-serif text-sm leading-relaxed text-gray-700">
+                <div className="text-center mb-6">
+                  <p className="text-xs font-sans font-semibold text-blue-600 tracking-wider uppercase">OneMalad Foundation</p>
+                  <p className="text-[11px] font-sans text-gray-400">Civic Complaint Reference: {showLetter.id}</p>
+                </div>
+
+                <p className="text-right mb-6">Date: {date}</p>
+
+                <div className="mb-6">
+                  <p className="font-semibold">To,</p>
+                  {corp ? (
+                    <>
+                      <p>{corp.name}</p>
+                      <p>Corporator, Ward {showLetter.wardNumber}</p>
+                      <p>{corp.party}</p>
+                    </>
+                  ) : (
+                    <p>Ward Corporator, Ward {showLetter.wardNumber}</p>
+                  )}
+                  <p>Malad, Mumbai</p>
+                </div>
+
+                <div className="mb-6">
+                  <p className="font-semibold">From,</p>
+                  <p>{showLetter.userName}</p>
+                  <p>Phone: {showLetter.userPhone}</p>
+                  {showLetter.userEmail && <p>Email: {showLetter.userEmail}</p>}
+                  <p>{showLetter.location}, Ward {showLetter.wardNumber}, Malad</p>
+                </div>
+
+                <p className="font-semibold mb-4">Subject: {showLetter.title}</p>
+
+                <p className="mb-4">Respected Sir/Madam,</p>
+
+                <p className="mb-4 text-justify">
+                  I, <strong>{showLetter.userName}</strong>, a resident of <strong>{showLetter.location}, Ward {showLetter.wardNumber}, Malad</strong>,
+                  wish to bring to your kind attention the following civic issue under the category of <strong>{showLetter.category.replace('_', ' ')}</strong>:
+                </p>
+
+                <div className="bg-gray-50 border-l-4 border-blue-500 p-4 mb-4 rounded-r-lg">
+                  <p className="text-justify">{showLetter.description}</p>
+                </div>
+
+                <p className="mb-4 text-justify">
+                  This matter is causing significant inconvenience to the residents of the area. I humbly request your immediate intervention
+                  and necessary action to resolve this issue at the earliest.
+                </p>
+
+                <p className="mb-1">Yours sincerely,</p>
+                <p className="font-semibold">{showLetter.userName}</p>
+                <p className="text-xs text-gray-400 mt-1">Contact: {showLetter.userPhone}</p>
+              </div>
+
+              <div className="p-6 border-t border-gray-100 flex gap-3 justify-end">
+                <button
+                  onClick={() => setShowLetter(null)}
+                  className="px-5 py-2.5 bg-gray-100 text-gray-600 rounded-lg font-medium text-sm hover:bg-gray-200 transition-colors"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    const el = document.querySelector('.font-serif');
+                    if (el) {
+                      const printWindow = window.open('', '_blank');
+                      if (printWindow) {
+                        printWindow.document.write(`<html><head><title>Complaint - ${showLetter.id}</title><style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;padding:20px;font-size:14px;line-height:1.7;color:#333}strong{font-weight:600}.highlight{background:#f0f7ff;border-left:4px solid #2563eb;padding:12px 16px;margin:16px 0;border-radius:0 8px 8px 0}.header{text-align:center;margin-bottom:24px}.ref{font-size:11px;color:#999;font-family:sans-serif}.brand{font-size:12px;color:#2563eb;font-family:sans-serif;text-transform:uppercase;letter-spacing:2px;font-weight:600}</style></head><body>`);
+                        printWindow.document.write(`<div class="header"><p class="brand">OneMalad Foundation</p><p class="ref">Civic Complaint Reference: ${showLetter.id}</p></div>`);
+                        printWindow.document.write(el.innerHTML);
+                        printWindow.document.write('</body></html>');
+                        printWindow.document.close();
+                        printWindow.print();
+                      }
+                    }
+                  }}
+                  className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-lg font-semibold text-sm hover:shadow-md transition-all"
+                >
+                  Print / Download
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </>
   );
 }

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useStore } from '@/hooks/useStore';
-import { FiMail, FiLock, FiUser, FiClock, FiCheckCircle, FiLoader, FiAlertCircle, FiArrowLeft } from 'react-icons/fi';
+import { FiMail, FiLock, FiClock, FiCheckCircle, FiLoader, FiAlertCircle, FiArrowLeft } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -17,36 +17,21 @@ const statusConfig: Record<string, { label: string; color: string; icon: React.R
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { user, loading, signInWithGoogle, signInWithEmail, signUpWithEmail, forgotPassword, logout } = useAuth();
+  const { user, loading, signInWithGoogle, signInWithEmail, forgotPassword, logout } = useAuth();
   const { issues } = useStore();
-  const [isLogin, setIsLogin] = useState(true);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
   const [resetSent, setResetSent] = useState(false);
-  const [verifyEmailSent, setVerifyEmailSent] = useState(false);
-  const [verifyEmailAddress, setVerifyEmailAddress] = useState('');
 
-  const handleEmailAuth = async (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthLoading(true);
     try {
-      if (isLogin) {
-        await signInWithEmail(email, password);
-      } else {
-        await signUpWithEmail(email, password, name);
-        // Sign-up successful — show verify email screen
-        setVerifyEmailAddress(email);
-        setVerifyEmailSent(true);
-      }
+      await signInWithEmail(email, password);
     } catch (err: any) {
-      // Check if it's an unverified email error
-      if (err.message === 'Email not verified') {
-        setVerifyEmailAddress(email);
-        setVerifyEmailSent(true);
-      }
+      toast.error(err.message || 'Sign in failed');
     }
     setAuthLoading(false);
   };
@@ -75,64 +60,19 @@ export default function DashboardPage() {
     );
   }
 
-  // Not logged in - show auth forms
+  // Not logged in — admin/corporator sign-in only
   if (!user) {
-    // Show "Verify Your Email" screen after sign-up or unverified sign-in
-    if (verifyEmailSent) {
-      return (
-        <>
-          <section className="page-header-gradient">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
-              <h1 className="text-3xl font-bold mb-2">Verify Your Email</h1>
-              <p className="opacity-90">One last step to activate your account</p>
-            </div>
-          </section>
-          <section className="py-12">
-            <div className="max-w-md mx-auto px-4">
-              <div className="card p-8 text-center">
-                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-5">
-                  <FiMail className="text-4xl text-blue-600" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">Check Your Inbox</h3>
-                <p className="text-sm text-gray-500 mb-2">
-                  We&apos;ve sent a verification link to:
-                </p>
-                <p className="font-semibold text-gray-800 mb-6">{verifyEmailAddress}</p>
-                <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6 text-left">
-                  <p className="text-sm text-blue-800 font-medium mb-2">What to do:</p>
-                  <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
-                    <li>Open your email inbox</li>
-                    <li>Click the verification link from OneMalad</li>
-                    <li>Come back here and sign in</li>
-                  </ol>
-                </div>
-                <p className="text-xs text-gray-400 mb-5">
-                  Don&apos;t see it? Check your spam folder. The email comes from OneMalad.
-                </p>
-                <button
-                  onClick={() => { setVerifyEmailSent(false); setIsLogin(true); }}
-                  className="w-full py-3 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all"
-                >
-                  Go to Sign In
-                </button>
-              </div>
-            </div>
-          </section>
-        </>
-      );
-    }
-
     return (
       <>
         <section className="page-header-gradient">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
             <h1 className="text-3xl font-bold mb-2">
-              {showForgotPassword ? 'Reset Password' : isLogin ? 'Sign In' : 'Create Account'}
+              {showForgotPassword ? 'Reset Password' : 'Admin / Corporator Login'}
             </h1>
             <p className="opacity-90">
               {showForgotPassword
                 ? 'Enter your email and we\'ll send you a reset link'
-                : 'Join OneMalad to raise issues and participate in community events'}
+                : 'This page is for authorized personnel only'}
             </p>
           </div>
         </section>
@@ -140,7 +80,6 @@ export default function DashboardPage() {
         <section className="py-12">
           <div className="max-w-md mx-auto px-4">
             <div className="card p-8">
-              {/* Forgot Password Form */}
               {showForgotPassword ? (
                 <>
                   {resetSent ? (
@@ -150,7 +89,7 @@ export default function DashboardPage() {
                       </div>
                       <h3 className="text-lg font-semibold text-gray-800 mb-2">Check Your Email</h3>
                       <p className="text-sm text-gray-500 mb-6">
-                        We&apos;ve sent a password reset link to <strong>{email}</strong>. Check your inbox and follow the instructions.
+                        We&apos;ve sent a password reset link to <strong>{email}</strong>.
                       </p>
                       <button
                         onClick={() => { setShowForgotPassword(false); setResetSent(false); }}
@@ -213,25 +152,8 @@ export default function DashboardPage() {
                     </div>
                   </div>
 
-                  {/* Email Form */}
-                  <form onSubmit={handleEmailAuth} className="space-y-4">
-                    {!isLogin && (
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                        <div className="relative">
-                          <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                          <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            placeholder="Your full name"
-                            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                            required
-                          />
-                        </div>
-                      </div>
-                    )}
-
+                  {/* Email Sign In */}
+                  <form onSubmit={handleSignIn} className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                       <div className="relative">
@@ -240,7 +162,7 @@ export default function DashboardPage() {
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          placeholder="you@example.com"
+                          placeholder="admin@onemalad.in"
                           className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                           required
                         />
@@ -250,15 +172,13 @@ export default function DashboardPage() {
                     <div>
                       <div className="flex items-center justify-between mb-1">
                         <label className="block text-sm font-medium text-gray-700">Password</label>
-                        {isLogin && (
-                          <button
-                            type="button"
-                            onClick={() => setShowForgotPassword(true)}
-                            className="text-xs text-blue-600 hover:underline font-medium"
-                          >
-                            Forgot password?
-                          </button>
-                        )}
+                        <button
+                          type="button"
+                          onClick={() => setShowForgotPassword(true)}
+                          className="text-xs text-blue-600 hover:underline font-medium"
+                        >
+                          Forgot password?
+                        </button>
                       </div>
                       <div className="relative">
                         <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -278,19 +198,9 @@ export default function DashboardPage() {
                       disabled={authLoading}
                       className="w-full py-3 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all disabled:opacity-50 hover:-translate-y-0.5 active:translate-y-0"
                     >
-                      {authLoading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
+                      {authLoading ? 'Signing in...' : 'Sign In'}
                     </button>
                   </form>
-
-                  <p className="text-center text-sm text-gray-500 mt-5">
-                    {isLogin ? "Don't have an account? " : 'Already have an account? '}
-                    <button
-                      onClick={() => setIsLogin(!isLogin)}
-                      className="text-blue-600 font-medium hover:underline"
-                    >
-                      {isLogin ? 'Sign Up' : 'Sign In'}
-                    </button>
-                  </p>
                 </>
               )}
             </div>
@@ -300,8 +210,8 @@ export default function DashboardPage() {
     );
   }
 
-  // Logged in - show dashboard
-  const userIssues = issues.filter((i) => i.userEmail === user.email);
+  // Logged in — show dashboard
+  const allIssues = issues;
 
   return (
     <>
@@ -347,13 +257,13 @@ export default function DashboardPage() {
 
       <section className="py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          {/* Quick Stats */}
+          {/* Stats — all issues across platform */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
             {[
-              { label: 'My Issues', val: userIssues.length, icon: <FiAlertCircle />, color: 'text-blue-600' },
-              { label: 'Pending', val: userIssues.filter((i) => i.status === 'pending').length, icon: <FiClock />, color: 'text-amber-600' },
-              { label: 'In Progress', val: userIssues.filter((i) => i.status === 'in_progress').length, icon: <FiLoader />, color: 'text-blue-600' },
-              { label: 'Resolved', val: userIssues.filter((i) => i.status === 'resolved').length, icon: <FiCheckCircle />, color: 'text-green-600' },
+              { label: 'Total Issues', val: allIssues.length, icon: <FiAlertCircle />, color: 'text-blue-600' },
+              { label: 'Pending', val: allIssues.filter((i) => i.status === 'pending').length, icon: <FiClock />, color: 'text-amber-600' },
+              { label: 'In Progress', val: allIssues.filter((i) => i.status === 'in_progress').length, icon: <FiLoader />, color: 'text-blue-600' },
+              { label: 'Resolved', val: allIssues.filter((i) => i.status === 'resolved').length, icon: <FiCheckCircle />, color: 'text-green-600' },
             ].map((s) => (
               <div key={s.label} className="card p-5 text-center">
                 <div className={`text-2xl ${s.color} flex justify-center mb-1`}>{s.icon}</div>
@@ -365,35 +275,46 @@ export default function DashboardPage() {
 
           {/* Quick Actions */}
           <div className="grid sm:grid-cols-3 gap-4 mb-10">
-            <Link href="/issues?action=raise" className="card p-5 card-hover text-center">
-              <div className="text-2xl mb-2">+</div>
-              <h3 className="font-semibold text-gray-800">Raise New Issue</h3>
-              <p className="text-sm text-gray-500">Report a civic problem</p>
+            {user.role === 'corporator' && (
+              <Link href="/corporator-panel" className="card p-5 card-hover text-center">
+                <div className="text-2xl mb-2">&#128221;</div>
+                <h3 className="font-semibold text-gray-800">Corporator Panel</h3>
+                <p className="text-sm text-gray-500">Manage & respond to issues</p>
+              </Link>
+            )}
+            {user.role === 'admin' && (
+              <Link href="/admin" className="card p-5 card-hover text-center">
+                <div className="text-2xl mb-2">&#9881;&#65039;</div>
+                <h3 className="font-semibold text-gray-800">Admin Panel</h3>
+                <p className="text-sm text-gray-500">Manage platform</p>
+              </Link>
+            )}
+            <Link href="/issues" className="card p-5 card-hover text-center">
+              <div className="text-2xl mb-2">&#128203;</div>
+              <h3 className="font-semibold text-gray-800">All Issues</h3>
+              <p className="text-sm text-gray-500">View all civic complaints</p>
             </Link>
             <Link href="/wards" className="card p-5 card-hover text-center">
               <div className="text-2xl mb-2">&#128506;</div>
-              <h3 className="font-semibold text-gray-800">Find Your Ward</h3>
+              <h3 className="font-semibold text-gray-800">Wards</h3>
               <p className="text-sm text-gray-500">Explore ward information</p>
-            </Link>
-            <Link href="/events" className="card p-5 card-hover text-center">
-              <div className="text-2xl mb-2">&#127881;</div>
-              <h3 className="font-semibold text-gray-800">Events</h3>
-              <p className="text-sm text-gray-500">Community activities</p>
             </Link>
           </div>
 
-          {/* My Issues */}
-          <h2 className="text-xl font-bold text-gray-800 mb-4">My Issues</h2>
-          {userIssues.length > 0 ? (
+          {/* Recent Issues */}
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Recent Issues</h2>
+          {allIssues.length > 0 ? (
             <div className="space-y-3">
-              {userIssues.map((issue) => {
+              {allIssues.slice(0, 10).map((issue) => {
                 const status = statusConfig[issue.status];
                 return (
                   <div key={issue.id} className="card p-5">
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <h3 className="font-semibold text-gray-800">{issue.title}</h3>
-                        <p className="text-sm text-gray-500 mt-1">Ward {issue.wardNumber} &middot; {issue.location}</p>
+                        <p className="text-sm text-gray-500 mt-1">
+                          {issue.userName} &middot; Ward {issue.wardNumber} &middot; {issue.location}
+                        </p>
                       </div>
                       <span className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${status.color}`}>
                         {status.icon} {status.label}
@@ -405,13 +326,7 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="card p-10 text-center">
-              <p className="text-gray-400 mb-3">You haven&apos;t raised any issues yet</p>
-              <Link
-                href="/issues?action=raise"
-                className="inline-flex px-5 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white text-sm font-semibold rounded-lg"
-              >
-                Raise Your First Issue
-              </Link>
+              <p className="text-gray-400">No issues raised yet</p>
             </div>
           )}
         </div>

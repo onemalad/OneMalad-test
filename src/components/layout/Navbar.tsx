@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { HiOutlineMenu, HiOutlineX, HiPlus } from 'react-icons/hi';
-import { FiUser, FiLogOut, FiGrid, FiSettings } from 'react-icons/fi';
+import { FiLogOut, FiGrid, FiSettings } from 'react-icons/fi';
 import { useAuth } from '@/context/AuthContext';
 import Logo from '@/components/ui/Logo';
 
@@ -59,8 +59,8 @@ export default function Navbar() {
               Raise Issue
             </Link>
 
-            {/* User Menu */}
-            {user ? (
+            {/* User Menu — only visible for logged-in admin/corporators */}
+            {user && (
               <div className="relative ml-2">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -115,13 +115,6 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-            ) : (
-              <Link
-                href="/dashboard"
-                className="ml-2 px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all flex items-center gap-1.5"
-              >
-                <FiUser className="text-base" /> Sign In
-              </Link>
             )}
           </div>
 
@@ -158,15 +151,6 @@ export default function Navbar() {
             >
               Raise Issue
             </Link>
-            {!user && (
-              <Link
-                href="/dashboard"
-                onClick={() => setMobileOpen(false)}
-                className="block mx-4 mt-2 px-5 py-2.5 border border-gray-200 text-gray-600 text-sm font-medium rounded-lg text-center"
-              >
-                Sign In
-              </Link>
-            )}
           </div>
         )}
       </div>

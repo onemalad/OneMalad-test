@@ -5,10 +5,7 @@ import {
   onAuthStateChanged,
   signInWithPopup,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
   sendPasswordResetEmail,
-  sendEmailVerification,
-  updateProfile,
   signOut,
   User as FirebaseUser,
 } from 'firebase/auth';
@@ -32,7 +29,6 @@ interface AuthContextType {
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
-  signUpWithEmail: (email: string, password: string, name: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   demoSignIn: (role: UserRole) => void;
   logout: () => void;
@@ -103,16 +99,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Real Firebase auth listener
       const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
         if (fbUser) {
-          // Check if email/password user has verified their email
-          const isGoogleUser = fbUser.providerData.some(p => p.providerId === 'google.com');
-          if (!isGoogleUser && !fbUser.emailVerified) {
-            // Unverified email — don't log them in
-            await signOut(auth);
-            setUser(null);
-            setLoading(false);
-            return;
-          }
-
           try {
             const profile = await getOrCreateProfile(fbUser);
             setUser(profile);
@@ -167,51 +153,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     try {
-      const cred = await signInWithEmailAndPassword(auth, email, password);
-      if (!cred.user.emailVerified) {
-        await sendEmailVerification(cred.user);
-        await signOut(auth);
-        setUser(null);
-        toast.error('Please verify your email first. A new verification link has been sent.');
-        throw new Error('Email not verified');
-      }
+      await signInWithEmailAndPassword(auth, email, password);
       toast.success('Signed in successfully!');
     } catch (err: unknown) {
       console.error('Sign-in error:', err);
       const message = err instanceof Error ? err.message : 'Sign-in failed';
-      if (message !== 'Email not verified') {
-        toast.error(message);
-      }
-      throw err;
-    }
-  };
-
-  const handleSignUpWithEmail = async (email: string, password: string, name: string) => {
-    if (!firebaseReady) {
-      toast.error('Firebase not configured. Use Demo Login below.');
-      return;
-    }
-    try {
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(cred.user, { displayName: name });
-      // Send email verification
-      await sendEmailVerification(cred.user);
-      // Create Firestore profile
-      const role: UserRole = email === 'onemaladconnect@gmail.com' ? 'admin' : 'citizen';
-      const profile = {
-        email: cred.user.email || '',
-        displayName: name,
-        role,
-        createdAt: new Date().toISOString(),
-      };
-      await setDoc(doc(db, 'users', cred.user.uid), profile);
-      // Sign out until email is verified
-      await signOut(auth);
-      setUser(null);
-      toast.success('Account created! Please check your email and verify before signing in.');
-    } catch (err: unknown) {
-      console.error('Sign-up error:', err);
-      const message = err instanceof Error ? err.message : 'Sign-up failed';
       toast.error(message);
       throw err;
     }
@@ -257,7 +203,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         signInWithGoogle: handleSignInWithGoogle,
         signInWithEmail: handleSignInWithEmail,
-        signUpWithEmail: handleSignUpWithEmail,
         forgotPassword: handleForgotPassword,
         demoSignIn,
         logout: handleLogout,

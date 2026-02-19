@@ -35,6 +35,7 @@ export interface Issue {
   imageUrls: string[];
   userName: string;
   userEmail: string;
+  userPhone: string;
   upvotes: number;
   createdAt: string;
   updatedAt: string;
