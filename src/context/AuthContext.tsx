@@ -103,6 +103,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Real Firebase auth listener
       const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
         if (fbUser) {
+          // Check if email/password user has verified their email
+          const isGoogleUser = fbUser.providerData.some(p => p.providerId === 'google.com');
+          if (!isGoogleUser && !fbUser.emailVerified) {
+            // Unverified email — don't log them in
+            await signOut(auth);
+            setUser(null);
+            setLoading(false);
+            return;
+          }
+
           try {
             const profile = await getOrCreateProfile(fbUser);
             setUser(profile);
