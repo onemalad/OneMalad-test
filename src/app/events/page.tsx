@@ -30,7 +30,7 @@ export default function EventsPage() {
         <div className="absolute top-[-40%] right-[-15%] w-[400px] h-[400px] bg-white/5 rounded-full" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center relative z-10">
           <span className="inline-block bg-white/15 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-medium mb-5 border border-white/20">
-            OneMalad Community
+            OneMalad Foundation
           </span>
           <h1 className="text-3xl sm:text-4xl font-bold mb-3">Events & Activities</h1>
           <p className="text-base opacity-90 max-w-xl mx-auto">
@@ -50,6 +50,8 @@ export default function EventsPage() {
               { val: 'sports' as const, label: 'Sports' },
               { val: 'education' as const, label: 'Education' },
               { val: 'health' as const, label: 'Health' },
+              { val: 'cleanliness' as const, label: 'Cleanliness' },
+              { val: 'environment' as const, label: 'Environment' },
             ].map((f) => (
               <button
                 key={f.val}

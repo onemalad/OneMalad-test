@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Ward Not Found' };
   }
 
-  const description = `Ward ${ward.number} (${ward.name}) covers ${ward.landmarks.join(', ')} in ${ward.area}, Mumbai.${corporator ? ` Corporator: ${corporator.name} (${corporator.party}).` : ''} View issues, track development, and raise complaints.`;
+  const description = `Ward ${ward.number} (${ward.name}) covers ${ward.landmarks.join(', ')} in ${ward.area}, Mumbai.${corporator ? ` Representative: ${corporator.name} (${corporator.party}).` : ''} View ward details, community activities, and demographics.`;
 
   return {
     title: `Ward ${ward.number} — ${ward.area} | ${ward.name}`,
@@ -24,8 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `Ward ${ward.number} Malad`, ward.name, ward.area, ward.zone,
       ...ward.landmarks,
       corporator?.name ?? '',
-      `${ward.area} issues`, `${ward.area} corporator`, 'BMC ward Malad',
-      'Malad ward development', 'Malad civic issues',
+      `${ward.area} community`, `${ward.area} representative`, 'BMC ward Malad',
+      'Malad ward development', 'OneMalad Foundation',
     ].filter(Boolean),
     openGraph: {
       title: `Ward ${ward.number} — ${ward.area} | OneMalad`,

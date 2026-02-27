@@ -14,7 +14,7 @@ import { auth, db, googleProvider } from '@/lib/firebase';
 import { isFirebaseConfigured } from '@/lib/firestore';
 import toast from 'react-hot-toast';
 
-export type UserRole = 'citizen' | 'corporator' | 'admin';
+export type UserRole = 'volunteer' | 'admin';
 
 export interface AppUser {
   uid: string;
@@ -38,18 +38,11 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 // Demo accounts for testing without Firebase
 const demoAccounts: Record<UserRole, AppUser> = {
-  citizen: {
-    uid: 'demo-citizen-1',
-    email: 'citizen@onemalad.in',
+  volunteer: {
+    uid: 'demo-volunteer-1',
+    email: 'volunteer@onemalad.in',
     displayName: 'Rahul Sharma',
-    role: 'citizen',
-    wardNumber: 32,
-  },
-  corporator: {
-    uid: 'demo-corporator-1',
-    email: 'corporator@onemalad.in',
-    displayName: 'Geeta Kiran Bhandari',
-    role: 'corporator',
+    role: 'volunteer',
     wardNumber: 32,
   },
   admin: {
@@ -71,13 +64,13 @@ async function getOrCreateProfile(fbUser: FirebaseUser): Promise<AppUser> {
       uid: fbUser.uid,
       email: fbUser.email || '',
       displayName: data.displayName || fbUser.displayName || '',
-      role: data.role || 'citizen',
+      role: data.role || 'volunteer',
       wardNumber: data.wardNumber,
     };
   }
 
   // First-time user — create profile in Firestore
-  const role: UserRole = fbUser.email === 'onemaladconnect@gmail.com' ? 'admin' : 'citizen';
+  const role: UserRole = fbUser.email === 'onemaladconnect@gmail.com' ? 'admin' : 'volunteer';
   const profile = {
     email: fbUser.email || '',
     displayName: fbUser.displayName || '',
@@ -105,7 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           } catch (err) {
             console.error('Error fetching user profile:', err);
             // Fallback: use Firebase Auth data directly if Firestore fails
-            const role: UserRole = fbUser.email === 'onemaladconnect@gmail.com' ? 'admin' : 'citizen';
+            const role: UserRole = fbUser.email === 'onemaladconnect@gmail.com' ? 'admin' : 'volunteer';
             setUser({
               uid: fbUser.uid,
               email: fbUser.email || '',
@@ -168,7 +161,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(account);
     localStorage.setItem('onemalad_user', JSON.stringify(account));
     toast.success(
-      `Signed in as ${role === 'admin' ? 'Admin' : role === 'corporator' ? 'Corporator' : 'Citizen'}: ${account.displayName}`,
+      `Signed in as ${role === 'admin' ? 'Admin' : 'Volunteer'}: ${account.displayName}`,
     );
   };
 

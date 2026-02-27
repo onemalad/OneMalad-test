@@ -11,7 +11,7 @@ export async function uploadImage(file: File, folder: string): Promise<string> {
 export async function uploadIssueImages(files: File[]): Promise<string[]> {
   const urls: string[] = [];
   for (const file of files) {
-    const url = await uploadImage(file, 'issues');
+    const url = await uploadImage(file, 'uploads');
     urls.push(url);
   }
   return urls;

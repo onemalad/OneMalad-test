@@ -39,7 +39,7 @@ export default function Logo({ size = 'md', variant = 'default' }: LogoProps) {
           )}
         </div>
         <span className={`${s.tagline} font-bold tracking-[0.15em] uppercase ${variant === 'white' ? 'text-white/40' : 'text-gray-400'}`}>
-          For the people
+          Community Foundation
         </span>
       </div>
     </Link>

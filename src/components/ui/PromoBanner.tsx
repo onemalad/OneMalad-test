@@ -7,7 +7,7 @@ import { isFirebaseConfigured, Banner, subscribeToBanners } from '@/lib/firestor
 // Fallback banners when Firestore is not connected
 const defaultBanners: Banner[] = [
   { id: 'hero-1', title: 'OneMalad Cricket Premier League 2026', subtitle: 'Register your ward team now! Exciting prizes worth Rs 1 Lakh', ctaText: 'Register Now', ctaLink: '/events', placement: 'hero', bgGradient: 'from-violet-600 via-purple-600 to-indigo-700', active: true },
-  { id: 'hero-2', title: 'Your Ward, Your Voice', subtitle: 'Raise civic issues directly to your corporator. Get real-time updates.', ctaText: 'Raise Issue', ctaLink: '/issues?action=raise', placement: 'hero', bgGradient: 'from-blue-600 via-cyan-600 to-teal-500', active: true },
+  { id: 'hero-2', title: 'Join the OneMalad Movement', subtitle: 'Volunteer for community drives in your ward. Together we serve, together we grow.', ctaText: 'Get Involved', ctaLink: '/volunteer', placement: 'hero', bgGradient: 'from-blue-600 via-cyan-600 to-teal-500', active: true },
   { id: 'inline-1', title: 'Free Health Camp - Feb 28', subtitle: 'General checkup, eye testing, dental checkup at Tanaji Nagar', ctaText: 'Learn More', ctaLink: '/events', placement: 'inline', bgGradient: 'from-emerald-500 to-teal-600', active: true },
   { id: 'footer-1', title: 'Partner with OneMalad', subtitle: 'Local businesses & organizations - lets build Malad together', ctaText: 'Get in Touch', ctaLink: '#', placement: 'footer', bgGradient: 'from-violet-600 to-blue-600', active: true },
 ];

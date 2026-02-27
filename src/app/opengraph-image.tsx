@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'OneMalad - Civic Engagement Platform for Malad, Mumbai';
+export const alt = 'OneMalad - Community Foundation for Malad, Mumbai';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -77,7 +77,7 @@ export default async function Image() {
               OneMalad
             </span>
             <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px', fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase' }}>
-              For the People
+              Community Foundation
             </span>
           </div>
         </div>
@@ -94,8 +94,8 @@ export default async function Image() {
             marginBottom: '40px',
           }}
         >
-          Raise Issues. Track Wards. Connect with Corporators.
-          Discover Malad.
+          Community Service. Volunteer Drives.
+          Building a Better Malad, Together.
         </div>
 
         {/* Stats row */}
@@ -107,7 +107,7 @@ export default async function Image() {
         >
           {[
             { num: '5', label: 'Wards' },
-            { num: '5', label: 'Corporators' },
+            { num: '500+', label: 'Volunteers' },
             { num: '5', label: 'Places' },
           ].map((stat) => (
             <div

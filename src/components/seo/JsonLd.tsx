@@ -1,12 +1,12 @@
 export default function JsonLd() {
   const organizationSchema = {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'OneMalad',
+    '@type': 'NGO',
+    name: 'OneMalad Foundation',
     url: 'https://onemalad.in',
     logo: 'https://onemalad.in/logo.png',
     description:
-      'OneMalad is a civic engagement platform for Malad, Mumbai — empowering residents to raise issues, track ward developments, and connect with local governance.',
+      'OneMalad Foundation — Building a stronger Malad through community service, cleanliness drives, health camps, food distribution, education programs, and grassroots engagement.',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Malad',
@@ -19,35 +19,37 @@ export default function JsonLd() {
       name: 'Malad, Mumbai',
     },
     sameAs: [
-      'https://twitter.com/OneMalad',
-      'https://instagram.com/OneMalad',
+      'https://x.com/onemalad',
+      'https://instagram.com/onemalad',
+      'https://facebook.com/onemalad',
+      'https://youtube.com/@onemalad',
     ],
   };
 
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'OneMalad',
+    name: 'OneMalad Foundation',
     url: 'https://onemalad.in',
     description:
-      'Malad\'s civic engagement platform — raise issues, track wards, discover places, connect with corporators.',
+      'Community foundation serving Malad through volunteer-driven social initiatives, events, and ward-level engagement.',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://onemalad.in/issues?search={search_term_string}',
+        urlTemplate: 'https://onemalad.in/our-work?search={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },
   };
 
-  const localBusinessSchema = {
+  const nonprofitSchema = {
     '@context': 'https://schema.org',
-    '@type': 'GovernmentOrganization',
-    name: 'OneMalad - Civic Engagement Platform',
+    '@type': 'NonprofitType',
+    name: 'OneMalad Foundation',
     url: 'https://onemalad.in',
     description:
-      'A civic platform connecting Malad residents with their ward corporators, tracking local issues, and celebrating the community.',
+      'A community foundation connecting Malad residents through social service, volunteer work, and ward-level community engagement.',
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Malad West',
@@ -74,10 +76,11 @@ export default function JsonLd() {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://onemalad.in' },
-      { '@type': 'ListItem', position: 2, name: 'Issues', item: 'https://onemalad.in/issues' },
+      { '@type': 'ListItem', position: 2, name: 'Our Work', item: 'https://onemalad.in/our-work' },
       { '@type': 'ListItem', position: 3, name: 'Wards', item: 'https://onemalad.in/wards' },
       { '@type': 'ListItem', position: 4, name: 'Events', item: 'https://onemalad.in/events' },
-      { '@type': 'ListItem', position: 5, name: 'Corporators', item: 'https://onemalad.in/corporators' },
+      { '@type': 'ListItem', position: 5, name: 'Volunteer', item: 'https://onemalad.in/volunteer' },
+      { '@type': 'ListItem', position: 6, name: 'Gallery', item: 'https://onemalad.in/gallery' },
     ],
   };
 
@@ -93,7 +96,7 @@ export default function JsonLd() {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(nonprofitSchema) }}
       />
       <script
         type="application/ld+json"

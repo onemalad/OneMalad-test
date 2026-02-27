@@ -3,7 +3,7 @@ import {
   collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc,
   query, orderBy, where, onSnapshot,
 } from 'firebase/firestore';
-import { Issue, CommunityEvent } from '@/types';
+import { Activity, CommunityEvent, Volunteer, GalleryImage, ImpactStat } from '@/types';
 
 // Check if Firebase is configured with real values
 export const isFirebaseConfigured = () => {
@@ -11,28 +11,24 @@ export const isFirebaseConfigured = () => {
   return !!(apiKey && apiKey !== 'your_api_key_here' && apiKey.length > 10);
 };
 
-// --- Issues ---
-export function subscribeToIssues(callback: (issues: Issue[]) => void) {
-  const q = query(collection(db, 'issues'), orderBy('createdAt', 'desc'));
+// --- Activities ---
+export function subscribeToActivities(callback: (activities: Activity[]) => void) {
+  const q = query(collection(db, 'activities'), orderBy('date', 'desc'));
   return onSnapshot(q, (snapshot) => {
-    const issues = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Issue));
-    callback(issues);
+    const activities = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Activity));
+    callback(activities);
   }, (error) => {
-    console.error('Firestore issues listener error:', error);
+    console.error('Firestore activities listener error:', error);
   });
 }
 
-export async function createIssueInFirestore(issue: Omit<Issue, 'id'>): Promise<string> {
-  const docRef = await addDoc(collection(db, 'issues'), issue);
+export async function createActivityInFirestore(activity: Omit<Activity, 'id'>): Promise<string> {
+  const docRef = await addDoc(collection(db, 'activities'), activity);
   return docRef.id;
 }
 
-export async function updateIssueInFirestore(id: string, data: Partial<Issue>) {
-  await updateDoc(doc(db, 'issues', id), data);
-}
-
-export async function deleteIssueFromFirestore(id: string) {
-  await deleteDoc(doc(db, 'issues', id));
+export async function deleteActivityFromFirestore(id: string) {
+  await deleteDoc(doc(db, 'activities', id));
 }
 
 // --- Events ---
@@ -59,7 +55,7 @@ export async function deleteEventFromFirestore(id: string) {
 export interface UserProfile {
   email: string;
   displayName: string;
-  role: 'citizen' | 'corporator' | 'admin';
+  role: 'volunteer' | 'admin';
   wardNumber?: number;
   createdAt: string;
 }
@@ -114,6 +110,46 @@ export async function deleteBannerFromFirestore(id: string) {
   await deleteDoc(doc(db, 'banners', id));
 }
 
+// --- Volunteers ---
+export function subscribeToVolunteers(callback: (volunteers: Volunteer[]) => void) {
+  const q = query(collection(db, 'volunteers'), orderBy('createdAt', 'desc'));
+  return onSnapshot(q, (snapshot) => {
+    const volunteers = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Volunteer));
+    callback(volunteers);
+  }, (error) => {
+    console.error('Firestore volunteers listener error:', error);
+  });
+}
+
+export async function createVolunteerInFirestore(volunteer: Omit<Volunteer, 'id'>): Promise<string> {
+  const docRef = await addDoc(collection(db, 'volunteers'), volunteer);
+  return docRef.id;
+}
+
+export async function updateVolunteerInFirestore(id: string, data: Partial<Volunteer>) {
+  await updateDoc(doc(db, 'volunteers', id), data);
+}
+
+// --- Gallery ---
+export function subscribeToGallery(callback: (images: GalleryImage[]) => void) {
+  const q = query(collection(db, 'gallery'), orderBy('createdAt', 'desc'));
+  return onSnapshot(q, (snapshot) => {
+    const images = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as GalleryImage));
+    callback(images);
+  }, (error) => {
+    console.error('Firestore gallery listener error:', error);
+  });
+}
+
+export async function createGalleryImageInFirestore(image: Omit<GalleryImage, 'id'>): Promise<string> {
+  const docRef = await addDoc(collection(db, 'gallery'), image);
+  return docRef.id;
+}
+
+export async function deleteGalleryImageFromFirestore(id: string) {
+  await deleteDoc(doc(db, 'gallery', id));
+}
+
 // --- Corporator Support ("I Support" feature) ---
 export async function toggleSupport(wardNumber: number, userId: string): Promise<boolean> {
   const supportId = `${wardNumber}_${userId}`;
@@ -141,32 +177,7 @@ export async function hasUserSupported(wardNumber: number, userId: string): Prom
   return snap.exists();
 }
 
-// --- Community Thoughts ---
-export interface Thought {
-  id: string;
-  userName: string;
-  userEmail: string;
-  text: string;
-  wardNumber?: number;
-  createdAt: string;
-}
-
-export function subscribeToThoughts(callback: (thoughts: Thought[]) => void) {
-  const q = query(collection(db, 'thoughts'), orderBy('createdAt', 'desc'));
-  return onSnapshot(q, (snapshot) => {
-    const thoughts = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Thought));
-    callback(thoughts);
-  }, (error) => {
-    console.error('Firestore thoughts listener error:', error);
-  });
-}
-
-export async function createThoughtInFirestore(thought: Omit<Thought, 'id'>): Promise<string> {
-  const docRef = await addDoc(collection(db, 'thoughts'), thought);
-  return docRef.id;
-}
-
-// --- Ward Updates (Corporator Blog Posts) ---
+// --- Ward Updates ---
 export interface WardUpdate {
   id: string;
   wardNumber: number;

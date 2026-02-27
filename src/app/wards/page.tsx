@@ -3,13 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { HiOutlineSearch } from 'react-icons/hi';
-import { FiAlertCircle, FiCheckCircle } from 'react-icons/fi';
+import { FiUsers, FiMapPin } from 'react-icons/fi';
 import { wardsData, getCorporatorByWard } from '@/data/wards';
-import { useStore } from '@/hooks/useStore';
 
 export default function WardsPage() {
   const [search, setSearch] = useState('');
-  const { issues } = useStore();
 
   const filtered = wardsData.filter((w) => {
     const corp = getCorporatorByWard(w.number);
@@ -28,12 +26,12 @@ export default function WardsPage() {
         <div className="absolute top-[-40%] right-[-15%] w-[400px] h-[400px] bg-white/5 rounded-full" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center relative z-10">
           <h1 className="text-3xl sm:text-4xl font-bold mb-3">Malad Wards</h1>
-          <p className="text-base opacity-90 mb-6">Find your ward and see the issues in your area</p>
+          <p className="text-base opacity-90 mb-6">Explore ward demographics, landmarks, and community representatives</p>
           <div className="max-w-lg mx-auto relative">
             <HiOutlineSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 text-lg" />
             <input
               type="text"
-              placeholder="Search by ward number, area, or corporator name..."
+              placeholder="Search by ward number, area, or representative name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-11 pr-5 py-3.5 rounded-full bg-white/15 backdrop-blur-sm border border-white/25 text-white placeholder:text-white/60 outline-none text-sm"
@@ -55,9 +53,6 @@ export default function WardsPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
             {filtered.map((ward) => {
               const corp = getCorporatorByWard(ward.number);
-              const wardIssues = issues.filter((i) => i.wardNumber === ward.number);
-              const pendingCount = wardIssues.filter((i) => i.status === 'pending').length;
-              const resolvedCount = wardIssues.filter((i) => i.status === 'resolved').length;
 
               return (
                 <Link href={`/wards/${ward.number}`} key={ward.number}>
@@ -87,18 +82,18 @@ export default function WardsPage() {
 
                       <div className="pt-3 border-t border-gray-100 grid grid-cols-2 gap-2">
                         <div className="text-center">
-                          <div className="flex items-center justify-center gap-1 text-amber-600">
-                            <FiAlertCircle className="text-xs" />
-                            <span className="text-sm font-bold">{pendingCount}</span>
+                          <div className="flex items-center justify-center gap-1 text-blue-600">
+                            <FiUsers className="text-xs" />
+                            <span className="text-sm font-bold">{ward.population ? ward.population.toLocaleString('en-IN') : '\u2014'}</span>
                           </div>
-                          <p className="text-[10px] text-gray-400 uppercase tracking-wide">Pending</p>
+                          <p className="text-[10px] text-gray-400 uppercase tracking-wide">Population</p>
                         </div>
                         <div className="text-center">
-                          <div className="flex items-center justify-center gap-1 text-green-600">
-                            <FiCheckCircle className="text-xs" />
-                            <span className="text-sm font-bold">{resolvedCount}</span>
+                          <div className="flex items-center justify-center gap-1 text-teal-600">
+                            <FiMapPin className="text-xs" />
+                            <span className="text-sm font-bold">{ward.landmarks.length}</span>
                           </div>
-                          <p className="text-[10px] text-gray-400 uppercase tracking-wide">Resolved</p>
+                          <p className="text-[10px] text-gray-400 uppercase tracking-wide">Landmarks</p>
                         </div>
                       </div>
                     </div>

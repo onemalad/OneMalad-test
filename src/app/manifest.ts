@@ -2,9 +2,9 @@ import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'OneMalad — Civic Engagement Platform',
+    name: 'OneMalad — Community Foundation',
     short_name: 'OneMalad',
-    description: 'Raise issues, track ward developments, and connect with your corporator in Malad, Mumbai.',
+    description: 'Building a stronger Malad through community service, social initiatives, and grassroots engagement.',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',

@@ -1,4 +1,4 @@
-export type UserRole = 'citizen' | 'corporator' | 'admin';
+export type UserRole = 'volunteer' | 'admin';
 
 export interface User {
   uid: string;
@@ -8,48 +8,6 @@ export interface User {
   role: UserRole;
   wardNumber?: number;
   phone?: string;
-  createdAt: string;
-}
-
-export type IssueStatus = 'pending' | 'in_progress' | 'resolved';
-export type IssueCategory =
-  | 'drainage'
-  | 'roads'
-  | 'garbage'
-  | 'water'
-  | 'electricity'
-  | 'sanitation'
-  | 'encroachment'
-  | 'other';
-
-export interface Issue {
-  id: string;
-  title: string;
-  description: string;
-  category: IssueCategory;
-  status: IssueStatus;
-  wardNumber: number;
-  location: string;
-  latitude?: number;
-  longitude?: number;
-  imageUrls: string[];
-  userName: string;
-  userEmail: string;
-  userPhone: string;
-  upvotes: number;
-  createdAt: string;
-  updatedAt: string;
-  resolvedAt?: string;
-  corporatorResponse?: string;
-  resolvedImageUrls?: string[];
-}
-
-export interface Comment {
-  id: string;
-  issueId: string;
-  userName: string;
-  userEmail: string;
-  text: string;
   createdAt: string;
 }
 
@@ -75,13 +33,66 @@ export interface Corporator {
   phone?: string;
   email?: string;
   bio?: string;
-  achievements: number;
-  issuesReceived: number;
-  issuesInProgress: number;
-  issuesResolved: number;
 }
 
-export type EventCategory = 'social' | 'cultural' | 'sports' | 'education' | 'health' | 'other';
+export type ActivityCategory =
+  | 'cleanliness_drive'
+  | 'health_camp'
+  | 'food_distribution'
+  | 'education'
+  | 'tree_planting'
+  | 'blood_donation'
+  | 'sports'
+  | 'cultural'
+  | 'infrastructure'
+  | 'other';
+
+export interface Activity {
+  id: string;
+  title: string;
+  description: string;
+  category: ActivityCategory;
+  date: string;
+  location: string;
+  wardNumber?: number;
+  imageUrls: string[];
+  volunteersCount: number;
+  beneficiariesCount: number;
+  createdAt: string;
+}
+
+export interface Volunteer {
+  id: string;
+  name: string;
+  phone: string;
+  email?: string;
+  wardNumber?: number;
+  interests: ActivityCategory[];
+  message?: string;
+  createdAt: string;
+  status: 'pending' | 'active';
+}
+
+export interface ImpactStat {
+  id: string;
+  label: string;
+  value: number;
+  suffix?: string;
+  emoji: string;
+  order: number;
+}
+
+export interface GalleryImage {
+  id: string;
+  url: string;
+  caption?: string;
+  activityId?: string;
+  category?: ActivityCategory;
+  date: string;
+  createdAt: string;
+}
+
+export type EventCategory = 'social' | 'cultural' | 'sports' | 'education' | 'health' | 'cleanliness' | 'environment' | 'other';
 
 export interface CommunityEvent {
   id: string;

@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { HiOutlineMenu, HiOutlineX, HiPlus } from 'react-icons/hi';
-import { FiLogOut, FiGrid, FiSettings } from 'react-icons/fi';
+import { HiOutlineMenu, HiOutlineX } from 'react-icons/hi';
+import { FiLogOut, FiGrid, FiSettings, FiHeart } from 'react-icons/fi';
 import { useAuth } from '@/context/AuthContext';
 import Logo from '@/components/ui/Logo';
 
@@ -17,9 +17,8 @@ export default function Navbar() {
 
   const navLinks = [
     { href: '/', label: 'Home' },
+    { href: '/our-work', label: 'Our Work' },
     { href: '/wards', label: 'Wards' },
-    { href: '/corporators', label: 'Corporators' },
-    { href: '/issues', label: 'Issues' },
     { href: '/events', label: 'Events' },
   ];
 
@@ -52,14 +51,14 @@ export default function Navbar() {
             ))}
 
             <Link
-              href="/issues?action=raise"
+              href="/volunteer"
               className="ml-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white text-sm font-semibold rounded-lg flex items-center gap-1.5 hover:shadow-md transition-all hover:-translate-y-0.5"
             >
-              <HiPlus className="text-lg" />
-              Raise Issue
+              <FiHeart className="text-lg" />
+              Get Involved
             </Link>
 
-            {/* User Menu — only visible for logged-in admin/corporators */}
+            {/* User Menu — only visible for logged-in admins */}
             {user && (
               <div className="relative ml-2">
                 <button
@@ -82,17 +81,8 @@ export default function Navbar() {
                       className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
                       onClick={() => setUserMenuOpen(false)}
                     >
-                      <FiGrid className="text-base" /> My Dashboard
+                      <FiGrid className="text-base" /> Dashboard
                     </Link>
-                    {user.role === 'corporator' && (
-                      <Link
-                        href="/corporator-panel"
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
-                        onClick={() => setUserMenuOpen(false)}
-                      >
-                        <FiSettings className="text-base" /> Corporator Panel
-                      </Link>
-                    )}
                     {user.role === 'admin' && (
                       <Link
                         href="/admin"
@@ -145,11 +135,11 @@ export default function Navbar() {
               </Link>
             ))}
             <Link
-              href="/issues?action=raise"
+              href="/volunteer"
               onClick={() => setMobileOpen(false)}
               className="block mx-4 mt-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white text-sm font-semibold rounded-lg text-center"
             >
-              Raise Issue
+              Get Involved
             </Link>
           </div>
         )}

@@ -1,0 +1,167 @@
+import { Activity, ImpactStat, CommunityEvent } from '@/types';
+
+export const sampleActivities: Activity[] = [
+  {
+    id: 'act-1',
+    title: 'Marve Beach Cleanup Drive',
+    description:
+      'Over 200 volunteers joined OneMalad Foundation to clean Marve Beach on Republic Day. We collected 500+ kg of plastic waste and debris, restoring the beach to its natural beauty. Local fishermen and school students participated enthusiastically.',
+    category: 'cleanliness_drive',
+    date: '2026-01-26',
+    location: 'Marve Beach, Malad West',
+    wardNumber: 32,
+    imageUrls: [],
+    volunteersCount: 200,
+    beneficiariesCount: 5000,
+    createdAt: '2026-01-26T07:00:00Z',
+  },
+  {
+    id: 'act-2',
+    title: 'Free Health Checkup Camp - Malwani',
+    description:
+      'Organized a free health checkup camp in partnership with local hospitals. Services included blood pressure screening, blood sugar testing, eye checkups, dental screening, and basic health consultation. Medicines were distributed free of cost.',
+    category: 'health_camp',
+    date: '2026-02-01',
+    location: 'P-North Ward Office, Malad West',
+    wardNumber: 34,
+    imageUrls: [],
+    volunteersCount: 30,
+    beneficiariesCount: 500,
+    createdAt: '2026-02-01T09:00:00Z',
+  },
+  {
+    id: 'act-3',
+    title: 'Ramadan Food Distribution Drive',
+    description:
+      'Distributed 1000+ meal packets (Iftar kits) to families across Malwani during the holy month of Ramadan. Kits included dates, fruits, water, and a full meal. Volunteers from all communities came together for this initiative.',
+    category: 'food_distribution',
+    date: '2026-02-15',
+    location: 'Malwani Gate 6, Malad West',
+    wardNumber: 34,
+    imageUrls: [],
+    volunteersCount: 50,
+    beneficiariesCount: 1000,
+    createdAt: '2026-02-15T18:00:00Z',
+  },
+  {
+    id: 'act-4',
+    title: 'Tree Plantation Drive - Madh Island',
+    description:
+      'Planted 200+ saplings across Madh Island in collaboration with local schools and environmental groups. Species planted include neem, peepal, and gulmohar. Each sapling has been geo-tagged for tracking growth.',
+    category: 'tree_planting',
+    date: '2026-02-05',
+    location: 'Madh Island, Malad West',
+    wardNumber: 49,
+    imageUrls: [],
+    volunteersCount: 75,
+    beneficiariesCount: 10000,
+    createdAt: '2026-02-05T08:00:00Z',
+  },
+  {
+    id: 'act-5',
+    title: 'Digital Literacy Workshop for Senior Citizens',
+    description:
+      'Conducted a hands-on workshop teaching senior citizens how to use smartphones, make UPI payments, book online appointments, and access government digital services. Volunteers from local IT companies guided each participant.',
+    category: 'education',
+    date: '2026-02-10',
+    location: 'Community Hall, Pushpa Park',
+    wardNumber: 33,
+    imageUrls: [],
+    volunteersCount: 15,
+    beneficiariesCount: 75,
+    createdAt: '2026-02-10T10:00:00Z',
+  },
+  {
+    id: 'act-6',
+    title: 'Blood Donation Camp',
+    description:
+      'Organized a blood donation camp in association with Tata Memorial Hospital. Over 150 units of blood were collected. Donors received free health checkups and certificates. The collected blood will support cancer patients and emergency cases.',
+    category: 'blood_donation',
+    date: '2026-01-15',
+    location: 'Jankalyan MHADA Community Hall',
+    wardNumber: 32,
+    imageUrls: [],
+    volunteersCount: 25,
+    beneficiariesCount: 150,
+    createdAt: '2026-01-15T09:00:00Z',
+  },
+];
+
+export const impactStats: ImpactStat[] = [
+  { id: 's1', label: 'Meals Distributed', value: 5000, suffix: '+', emoji: '\u{1F37D}\uFE0F', order: 1 },
+  { id: 's2', label: 'Cleanliness Drives', value: 25, suffix: '+', emoji: '\u{1F9F9}', order: 2 },
+  { id: 's3', label: 'Health Camps', value: 12, suffix: '+', emoji: '\u{1FA7A}', order: 3 },
+  { id: 's4', label: 'Volunteers', value: 500, suffix: '+', emoji: '\u{1F91D}', order: 4 },
+  { id: 's5', label: 'Trees Planted', value: 1000, suffix: '+', emoji: '\u{1F333}', order: 5 },
+  { id: 's6', label: 'Blood Units Collected', value: 300, suffix: '+', emoji: '\u{1FA78}', order: 6 },
+];
+
+export const sampleEvents: CommunityEvent[] = [
+  {
+    id: 'event-1',
+    title: 'OneMalad Cricket Tournament 2026',
+    description:
+      'Annual inter-ward cricket tournament for youth. Teams from all 5 wards will compete in a T20 format. Registrations open for players aged 16-30.',
+    category: 'sports',
+    date: '2026-03-15',
+    time: '8:00 AM - 6:00 PM',
+    location: 'Malad Sports Ground, SV Road',
+    organizer: 'OneMalad Sports Committee',
+    attendees: 250,
+    isUpcoming: true,
+  },
+  {
+    id: 'event-2',
+    title: 'Community Health Camp',
+    description:
+      'Free health checkup camp organized in partnership with local hospitals. Includes blood pressure, sugar, eye checkup, and dental screening. Open to all Malad residents.',
+    category: 'health',
+    date: '2026-03-01',
+    time: '9:00 AM - 4:00 PM',
+    location: 'P-North Ward Office, Malad West',
+    wardNumber: 32,
+    organizer: 'OneMalad Health Initiative',
+    attendees: 500,
+    isUpcoming: true,
+  },
+  {
+    id: 'event-3',
+    title: 'Malad Cultural Festival',
+    description:
+      'A celebration of the diverse culture of Malad featuring music, dance, food stalls, and art exhibitions. Showcasing talent from all communities.',
+    category: 'cultural',
+    date: '2026-02-20',
+    time: '5:00 PM - 10:00 PM',
+    location: 'Evershine Nagar Ground, Malad West',
+    organizer: 'OneMalad Cultural Wing',
+    attendees: 1000,
+    isUpcoming: true,
+  },
+  {
+    id: 'event-4',
+    title: 'Digital Literacy Workshop for Senior Citizens',
+    description:
+      'Teaching senior citizens how to use smartphones, UPI payments, and government digital services. Volunteers from local IT companies will conduct sessions.',
+    category: 'education',
+    date: '2026-02-10',
+    time: '10:00 AM - 1:00 PM',
+    location: 'Community Hall, Pushpa Park',
+    wardNumber: 33,
+    organizer: 'OneMalad Education Cell',
+    attendees: 75,
+    isUpcoming: false,
+  },
+  {
+    id: 'event-5',
+    title: 'Beach Cleanup Drive - Marve & Aksa',
+    description:
+      'Join us for a massive beach cleanup drive at Marve and Aksa beaches. Gloves and bags will be provided. Help keep our coastline clean!',
+    category: 'social',
+    date: '2026-01-26',
+    time: '7:00 AM - 11:00 AM',
+    location: 'Marve Beach, Malad West',
+    organizer: 'OneMalad Green Initiative',
+    attendees: 300,
+    isUpcoming: false,
+  },
+];

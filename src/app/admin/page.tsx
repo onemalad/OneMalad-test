@@ -5,12 +5,12 @@ import { useAuth } from '@/context/AuthContext';
 import { useStore } from '@/hooks/useStore';
 import { wardsData, corporatorsData, getCorporatorByWard } from '@/data/wards';
 import {
-  FiUsers, FiMapPin, FiAlertCircle, FiCalendar, FiCheckCircle, FiClock, FiLoader,
-  FiTrendingUp, FiTrash2, FiEdit, FiPlus, FiX, FiBarChart2, FiSettings, FiImage
+  FiUsers, FiMapPin, FiCalendar, FiCheckCircle, FiHeart,
+  FiTrash2, FiPlus, FiX, FiBarChart2, FiSettings, FiImage, FiActivity
 } from 'react-icons/fi';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { IssueStatus, CommunityEvent } from '@/types';
+import { CommunityEvent, Activity, ActivityCategory } from '@/types';
 import {
   isFirebaseConfigured,
   Banner,
@@ -19,30 +19,52 @@ import {
   updateBannerInFirestore,
   deleteBannerFromFirestore,
   updateUserRole,
+  createActivityInFirestore,
+  deleteActivityFromFirestore,
+  subscribeToVolunteers,
 } from '@/lib/firestore';
+import { Volunteer } from '@/types';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 const DEFAULT_BANNERS: Banner[] = [
   { id: 'b1', title: 'OneMalad Cricket Premier League 2026', subtitle: 'Register your ward team now!', ctaText: 'Register Now', ctaLink: '/events', placement: 'hero', bgGradient: 'from-violet-600 via-purple-600 to-indigo-700', active: true },
-  { id: 'b2', title: 'Your Ward, Your Voice', subtitle: 'Raise civic issues directly to your corporator', ctaText: 'Raise Issue', ctaLink: '/issues?action=raise', placement: 'hero', bgGradient: 'from-blue-600 via-cyan-600 to-teal-500', active: true },
+  { id: 'b2', title: 'Join the OneMalad Movement', subtitle: 'Volunteer for community drives in your ward', ctaText: 'Get Involved', ctaLink: '/volunteer', placement: 'hero', bgGradient: 'from-blue-600 via-cyan-600 to-teal-500', active: true },
   { id: 'b3', title: 'Advertise Here', subtitle: 'Reach 50,000+ Malad residents', ctaText: 'Contact Us', ctaLink: '#', placement: 'sidebar', bgGradient: 'from-gray-100 to-gray-50', active: true },
   { id: 'b4', title: 'Free Health Camp - Feb 28', subtitle: 'General checkup, eye testing, dental checkup', ctaText: 'Learn More', ctaLink: '/events', placement: 'inline', bgGradient: 'from-emerald-500 to-teal-600', active: true },
   { id: 'b5', title: 'Partner with OneMalad', subtitle: 'Local businesses & organizations - lets build Malad together', ctaText: 'Get in Touch', ctaLink: '#', placement: 'footer', bgGradient: 'from-violet-600 to-blue-600', active: true },
 ];
 
-const statusConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  pending: { label: 'Pending', color: 'bg-amber-100 text-amber-700', icon: <FiClock /> },
-  in_progress: { label: 'In Progress', color: 'bg-blue-100 text-blue-700', icon: <FiLoader /> },
-  resolved: { label: 'Resolved', color: 'bg-green-100 text-green-700', icon: <FiCheckCircle /> },
-};
+const activityCategories: { val: ActivityCategory; label: string }[] = [
+  { val: 'cleanliness_drive', label: 'Cleanliness Drive' },
+  { val: 'health_camp', label: 'Health Camp' },
+  { val: 'food_distribution', label: 'Food Distribution' },
+  { val: 'education', label: 'Education' },
+  { val: 'tree_planting', label: 'Tree Planting' },
+  { val: 'blood_donation', label: 'Blood Donation' },
+  { val: 'sports', label: 'Sports' },
+  { val: 'cultural', label: 'Cultural' },
+  { val: 'infrastructure', label: 'Infrastructure' },
+  { val: 'other', label: 'Other' },
+];
 
 export default function AdminPage() {
   const { user } = useAuth();
-  const { issues, events, updateIssueStatus, deleteIssue, addEvent, deleteEvent } = useStore();
-  const [activeTab, setActiveTab] = useState<'overview' | 'issues' | 'events' | 'users' | 'banners' | 'wards' | 'settings'>('overview');
+  const { activities, events, impactStats, addActivity, deleteActivity, addEvent, deleteEvent } = useStore();
+  const [activeTab, setActiveTab] = useState<'overview' | 'activities' | 'events' | 'volunteers' | 'users' | 'banners' | 'wards' | 'settings'>('overview');
   const [showEventModal, setShowEventModal] = useState(false);
+  const [showActivityModal, setShowActivityModal] = useState(false);
   const [showBannerModal, setShowBannerModal] = useState(false);
+
+  // Activity form
+  const [actTitle, setActTitle] = useState('');
+  const [actDesc, setActDesc] = useState('');
+  const [actCategory, setActCategory] = useState<ActivityCategory>('cleanliness_drive');
+  const [actDate, setActDate] = useState('');
+  const [actLocation, setActLocation] = useState('');
+  const [actWard, setActWard] = useState('');
+  const [actVolunteers, setActVolunteers] = useState('');
+  const [actBeneficiaries, setActBeneficiaries] = useState('');
 
   // Event form
   const [eventTitle, setEventTitle] = useState('');
@@ -64,19 +86,12 @@ export default function AdminPage() {
   const [bannerImagePreview, setBannerImagePreview] = useState('');
   const bannerFileRef = useRef<HTMLInputElement>(null);
 
-  // Resolve issue modal state
-  const [showResolveModal, setShowResolveModal] = useState(false);
-  const [resolveIssueId, setResolveIssueId] = useState('');
-  const [resolveResponse, setResolveResponse] = useState('');
-  const [resolveImageUrls, setResolveImageUrls] = useState('');
-
-  // Banners state — synced with Firestore when configured
+  // State
   const [banners, setBanners] = useState<Banner[]>(DEFAULT_BANNERS);
-
-  // Users state
   const [users, setUsers] = useState<Array<{ uid: string; email: string; displayName: string; role: string; wardNumber?: number; createdAt?: string }>>([]);
+  const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
 
-  // Subscribe to Firestore banners when configured
+  // Subscribe to Firestore
   useEffect(() => {
     if (!isFirebaseConfigured()) return;
     const unsub = subscribeToBanners((firestoreBanners) => {
@@ -85,7 +100,6 @@ export default function AdminPage() {
     return unsub;
   }, []);
 
-  // Subscribe to Firestore users
   useEffect(() => {
     if (!isFirebaseConfigured()) return;
     const unsub = onSnapshot(collection(db, 'users'), (snapshot) => {
@@ -93,6 +107,14 @@ export default function AdminPage() {
       setUsers(usersList);
     }, (error) => {
       console.error('Firestore users listener error:', error);
+    });
+    return unsub;
+  }, []);
+
+  useEffect(() => {
+    if (!isFirebaseConfigured()) return;
+    const unsub = subscribeToVolunteers((vols) => {
+      setVolunteers(vols);
     });
     return unsub;
   }, []);
@@ -109,19 +131,41 @@ export default function AdminPage() {
     );
   }
 
-  const pendingCount = issues.filter((i) => i.status === 'pending').length;
-  const progressCount = issues.filter((i) => i.status === 'in_progress').length;
-  const resolvedCount = issues.filter((i) => i.status === 'resolved').length;
   const upcomingEvents = events.filter((e) => new Date(e.date) >= new Date()).length;
 
-  const handleStatusChange = (id: string, status: IssueStatus) => {
-    updateIssueStatus(id, status);
-    toast.success('Issue status updated');
+  const handleAddActivity = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!actTitle || !actDate || !actLocation) {
+      toast.error('Fill all required fields');
+      return;
+    }
+    const newActivity: Activity = {
+      id: `act-${Date.now()}`,
+      title: actTitle,
+      description: actDesc,
+      category: actCategory,
+      date: actDate,
+      location: actLocation,
+      wardNumber: actWard ? Number(actWard) : undefined,
+      imageUrls: [],
+      volunteersCount: Number(actVolunteers) || 0,
+      beneficiariesCount: Number(actBeneficiaries) || 0,
+      createdAt: new Date().toISOString(),
+    };
+    if (isFirebaseConfigured()) {
+      const { id, ...data } = newActivity;
+      await createActivityInFirestore(data);
+    } else {
+      addActivity(newActivity);
+    }
+    toast.success('Activity created!');
+    setShowActivityModal(false);
+    setActTitle(''); setActDesc(''); setActDate(''); setActLocation(''); setActWard(''); setActVolunteers(''); setActBeneficiaries('');
   };
 
-  const handleDeleteIssue = (id: string) => {
-    deleteIssue(id);
-    toast.success('Issue deleted');
+  const handleDeleteActivity = (id: string) => {
+    deleteActivity(id);
+    toast.success('Activity deleted');
   };
 
   const handleAddEvent = (e: React.FormEvent) => {
@@ -138,18 +182,14 @@ export default function AdminPage() {
       date: eventDate,
       time: eventTime,
       location: eventVenue,
-      organizer: 'OneMalad Community',
+      organizer: 'OneMalad Foundation',
       attendees: 0,
       isUpcoming: new Date(eventDate) >= new Date(),
     };
     addEvent(newEvent);
     toast.success('Event created!');
     setShowEventModal(false);
-    setEventTitle('');
-    setEventDesc('');
-    setEventDate('');
-    setEventTime('');
-    setEventVenue('');
+    setEventTitle(''); setEventDesc(''); setEventDate(''); setEventTime(''); setEventVenue('');
   };
 
   const handleBannerImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,14 +210,12 @@ export default function AdminPage() {
       toast.error('Banner title is required');
       return;
     }
-
     let imageUrl = bannerImageUrl;
     if (bannerImageFile && isFirebaseConfigured()) {
       const { uploadIssueImages } = await import('@/lib/storage');
       const urls = await uploadIssueImages([bannerImageFile]);
       imageUrl = urls[0] || '';
     }
-
     const newBanner: Omit<Banner, 'id'> = {
       title: bannerTitle,
       subtitle: bannerSubtitle,
@@ -195,36 +233,10 @@ export default function AdminPage() {
     }
     toast.success('Banner created!');
     setShowBannerModal(false);
-    setBannerTitle('');
-    setBannerSubtitle('');
-    setBannerCta('');
-    setBannerLink('');
-    setBannerImageUrl('');
+    setBannerTitle(''); setBannerSubtitle(''); setBannerCta(''); setBannerLink(''); setBannerImageUrl('');
     setBannerImageFile(null);
     if (bannerImagePreview) URL.revokeObjectURL(bannerImagePreview);
     setBannerImagePreview('');
-  };
-
-  const handleResolveIssue = async () => {
-    if (!resolveIssueId) return;
-    const updateData: Record<string, unknown> = {
-      status: 'resolved' as IssueStatus,
-      resolvedAt: new Date().toISOString(),
-    };
-    if (resolveResponse) updateData.corporatorResponse = resolveResponse;
-    if (resolveImageUrls.trim()) {
-      updateData.resolvedImageUrls = resolveImageUrls.split(',').map((u) => u.trim()).filter(Boolean);
-    }
-    updateIssueStatus(resolveIssueId, 'resolved');
-    if (isFirebaseConfigured()) {
-      const { updateIssueInFirestore } = await import('@/lib/firestore');
-      await updateIssueInFirestore(resolveIssueId, updateData as Partial<import('@/types').Issue>);
-    }
-    toast.success('Issue marked as resolved!');
-    setShowResolveModal(false);
-    setResolveIssueId('');
-    setResolveResponse('');
-    setResolveImageUrls('');
   };
 
   const handleDeleteBanner = async (id: string) => {
@@ -258,8 +270,9 @@ export default function AdminPage() {
 
   const tabs = [
     { val: 'overview' as const, label: 'Overview', icon: <FiBarChart2 /> },
-    { val: 'issues' as const, label: 'Issues', icon: <FiAlertCircle /> },
+    { val: 'activities' as const, label: 'Activities', icon: <FiActivity /> },
     { val: 'events' as const, label: 'Events', icon: <FiCalendar /> },
+    { val: 'volunteers' as const, label: 'Volunteers', icon: <FiHeart /> },
     { val: 'users' as const, label: 'Users', icon: <FiUsers /> },
     { val: 'banners' as const, label: 'Banners', icon: <FiImage /> },
     { val: 'wards' as const, label: 'Wards', icon: <FiMapPin /> },
@@ -273,7 +286,7 @@ export default function AdminPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
             <div>
-              <p className="text-xs text-gray-400 uppercase tracking-wider font-medium">Super Admin</p>
+              <p className="text-xs text-gray-400 uppercase tracking-wider font-medium">Foundation Admin</p>
               <h1 className="text-xl font-bold">OneMalad Admin Panel</h1>
             </div>
             <Link href="/" className="text-sm text-gray-400 hover:text-white transition-colors">
@@ -304,11 +317,11 @@ export default function AdminPage() {
             <>
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
                 {[
-                  { label: 'Total Issues', val: issues.length, icon: <FiAlertCircle />, color: 'text-gray-800' },
-                  { label: 'Pending', val: pendingCount, icon: <FiClock />, color: 'text-amber-600' },
-                  { label: 'In Progress', val: progressCount, icon: <FiLoader />, color: 'text-blue-600' },
-                  { label: 'Resolved', val: resolvedCount, icon: <FiCheckCircle />, color: 'text-green-600' },
+                  { label: 'Activities', val: activities.length, icon: <FiActivity />, color: 'text-blue-600' },
+                  { label: 'Volunteers', val: volunteers.length, icon: <FiHeart />, color: 'text-rose-600' },
                   { label: 'Events', val: upcomingEvents, icon: <FiCalendar />, color: 'text-purple-600' },
+                  { label: 'Users', val: users.length, icon: <FiUsers />, color: 'text-teal-600' },
+                  { label: 'Banners', val: banners.filter((b) => b.active).length, icon: <FiImage />, color: 'text-amber-600' },
                 ].map((s) => (
                   <div key={s.label} className="card p-5 text-center">
                     <div className={`text-xl ${s.color} flex justify-center mb-1`}>{s.icon}</div>
@@ -318,46 +331,49 @@ export default function AdminPage() {
                 ))}
               </div>
 
-              {/* Ward Performance */}
-              <h3 className="font-semibold text-gray-800 mb-4">Ward Performance</h3>
+              {/* Impact Stats */}
+              <h3 className="font-semibold text-gray-800 mb-4">Foundation Impact</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+                {impactStats.sort((a, b) => a.order - b.order).map((stat) => (
+                  <div key={stat.id} className="card p-4 text-center">
+                    <div className="text-2xl mb-1">{stat.emoji}</div>
+                    <div className="text-xl font-extrabold text-gray-800">{stat.value.toLocaleString()}{stat.suffix}</div>
+                    <p className="text-xs text-gray-500 mt-0.5">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Ward Overview */}
+              <h3 className="font-semibold text-gray-800 mb-4">Ward Overview</h3>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                 {wardsData.map((ward) => {
                   const corp = getCorporatorByWard(ward.number);
-                  const wardIssues = issues.filter((i) => i.wardNumber === ward.number);
-                  const resolved = wardIssues.filter((i) => i.status === 'resolved').length;
-                  const rate = wardIssues.length > 0 ? Math.round((resolved / wardIssues.length) * 100) : 0;
+                  const wardActivities = activities.filter((a) => a.wardNumber === ward.number);
                   return (
                     <div key={ward.number} className="card p-5">
                       <div className="flex items-center justify-between mb-3">
                         <div>
                           <h4 className="font-semibold text-gray-800">Ward {ward.number}</h4>
-                          <p className="text-xs text-gray-400">{corp?.name || 'No corporator'}</p>
+                          <p className="text-xs text-gray-400">{corp?.name || 'No representative'}</p>
                         </div>
-                        <span className="text-sm font-bold text-green-600">{rate}%</span>
+                        <span className="text-sm font-bold text-blue-600">{wardActivities.length}</span>
                       </div>
-                      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-green-500 rounded-full" style={{ width: `${rate}%` }} />
-                      </div>
-                      <div className="flex justify-between mt-2 text-xs text-gray-400">
-                        <span>{wardIssues.length} issues</span>
-                        <span>{resolved} resolved</span>
-                      </div>
+                      <p className="text-xs text-gray-400">{wardActivities.length} activities &middot; {ward.population ? ward.population.toLocaleString('en-IN') : '\u2014'} population</p>
                     </div>
                   );
                 })}
               </div>
 
-              {/* Corporators */}
-              <h3 className="font-semibold text-gray-800 mb-4">Corporators Overview</h3>
+              {/* Representatives */}
+              <h3 className="font-semibold text-gray-800 mb-4">Community Representatives</h3>
               <div className="card overflow-hidden">
                 <table className="w-full text-sm">
                   <thead className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
                     <tr>
-                      <th className="text-left px-4 py-3">Corporator</th>
+                      <th className="text-left px-4 py-3">Representative</th>
                       <th className="text-left px-4 py-3">Ward</th>
                       <th className="text-left px-4 py-3">Party</th>
-                      <th className="text-center px-4 py-3">Issues</th>
-                      <th className="text-center px-4 py-3">Resolved</th>
+                      <th className="text-center px-4 py-3">Votes</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
@@ -366,8 +382,7 @@ export default function AdminPage() {
                         <td className="px-4 py-3 font-medium text-gray-800">{corp.name}</td>
                         <td className="px-4 py-3 text-gray-500">Ward {corp.wardNumber}</td>
                         <td className="px-4 py-3 text-gray-500">{corp.party}</td>
-                        <td className="px-4 py-3 text-center">{corp.issuesReceived}</td>
-                        <td className="px-4 py-3 text-center text-green-600 font-medium">{corp.issuesResolved}</td>
+                        <td className="px-4 py-3 text-center text-blue-600 font-medium">{corp.votes.toLocaleString()}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -376,56 +391,109 @@ export default function AdminPage() {
             </>
           )}
 
-          {/* Issues Management */}
-          {activeTab === 'issues' && (
+          {/* Activities Management */}
+          {activeTab === 'activities' && (
             <>
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-800">All Issues ({issues.length})</h2>
+                <h2 className="text-xl font-bold text-gray-800">Activities ({activities.length})</h2>
+                <button
+                  onClick={() => setShowActivityModal(true)}
+                  className="px-4 py-2 bg-gradient-to-r from-blue-600 to-teal-500 text-white text-sm font-semibold rounded-lg flex items-center gap-1.5"
+                >
+                  <FiPlus /> New Activity
+                </button>
               </div>
               <div className="space-y-3">
-                {issues.map((issue) => {
-                  const status = statusConfig[issue.status];
-                  return (
-                    <div key={issue.id} className="card p-5">
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <div>
-                          <h3 className="font-semibold text-gray-800">{issue.title}</h3>
-                          <p className="text-xs text-gray-400">
-                            Ward {issue.wardNumber} &middot; {issue.userName} &middot; {new Date(issue.createdAt).toLocaleDateString('en-IN')}
-                          </p>
-                        </div>
-                        <span className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${status.color}`}>
-                          {status.icon} {status.label}
-                        </span>
+                {activities.map((activity) => (
+                  <div key={activity.id} className="card p-5">
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <div>
+                        <h3 className="font-semibold text-gray-800">{activity.title}</h3>
+                        <p className="text-xs text-gray-400">
+                          {activity.category.replace('_', ' ')} &middot; {activity.location} &middot; {new Date(activity.date).toLocaleDateString('en-IN')}
+                        </p>
                       </div>
-                      <p className="text-sm text-gray-500 mb-3">{issue.description}</p>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <select
-                          value={issue.status}
-                          onChange={(e) => handleStatusChange(issue.id, e.target.value as IssueStatus)}
-                          className="px-3 py-1.5 border border-gray-200 rounded-lg text-xs outline-none focus:border-blue-500"
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="in_progress">In Progress</option>
-                          <option value="resolved">Resolved</option>
-                        </select>
-                        <button
-                          onClick={() => { setResolveIssueId(issue.id); setShowResolveModal(true); }}
-                          className="px-3 py-1.5 bg-green-50 text-green-600 text-xs font-medium rounded-lg hover:bg-green-100 transition-colors flex items-center gap-1"
-                        >
-                          <FiCheckCircle /> Resolve with Details
-                        </button>
-                        <button
-                          onClick={() => handleDeleteIssue(issue.id)}
-                          className="px-3 py-1.5 bg-red-50 text-red-500 text-xs font-medium rounded-lg hover:bg-red-100 transition-colors flex items-center gap-1"
-                        >
-                          <FiTrash2 /> Delete
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => handleDeleteActivity(activity.id)}
+                        className="p-2 text-red-400 hover:bg-red-50 rounded-lg transition-colors"
+                      >
+                        <FiTrash2 />
+                      </button>
                     </div>
-                  );
-                })}
+                    <p className="text-sm text-gray-500 mb-2">{activity.description}</p>
+                    <div className="flex gap-4 text-xs text-gray-400">
+                      <span>{activity.volunteersCount} volunteers</span>
+                      <span>{activity.beneficiariesCount} beneficiaries</span>
+                      {activity.wardNumber && <span>Ward {activity.wardNumber}</span>}
+                    </div>
+                  </div>
+                ))}
               </div>
+
+              {/* New Activity Modal */}
+              {showActivityModal && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                  <div className="bg-white rounded-2xl p-8 max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-2xl">
+                    <div className="flex items-center justify-between mb-6">
+                      <h2 className="text-xl font-bold text-gray-800">Create Activity</h2>
+                      <button onClick={() => setShowActivityModal(false)} className="p-1 hover:bg-gray-100 rounded-lg">
+                        <FiX className="text-xl text-gray-500" />
+                      </button>
+                    </div>
+                    <form onSubmit={handleAddActivity} className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Activity Title *</label>
+                        <input type="text" value={actTitle} onChange={(e) => setActTitle(e.target.value)} placeholder="Activity name" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" required />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                        <select value={actCategory} onChange={(e) => setActCategory(e.target.value as ActivityCategory)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500">
+                          {activityCategories.map((c) => (
+                            <option key={c.val} value={c.val}>{c.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <textarea value={actDesc} onChange={(e) => setActDesc(e.target.value)} rows={3} placeholder="Activity description" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500 resize-y" />
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Date *</label>
+                          <input type="date" value={actDate} onChange={(e) => setActDate(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" required />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Ward</label>
+                          <select value={actWard} onChange={(e) => setActWard(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500">
+                            <option value="">All Wards</option>
+                            {wardsData.map((w) => (
+                              <option key={w.number} value={w.number}>Ward {w.number}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Location *</label>
+                        <input type="text" value={actLocation} onChange={(e) => setActLocation(e.target.value)} placeholder="e.g. Marve Beach, Malad West" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" required />
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Volunteers</label>
+                          <input type="number" value={actVolunteers} onChange={(e) => setActVolunteers(e.target.value)} placeholder="0" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Beneficiaries</label>
+                          <input type="number" value={actBeneficiaries} onChange={(e) => setActBeneficiaries(e.target.value)} placeholder="0" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" />
+                        </div>
+                      </div>
+                      <div className="flex gap-3 justify-end pt-2">
+                        <button type="button" onClick={() => setShowActivityModal(false)} className="px-5 py-2.5 bg-gray-100 text-gray-600 rounded-lg font-medium text-sm">Cancel</button>
+                        <button type="submit" className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-lg font-semibold text-sm">Create Activity</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
             </>
           )}
 
@@ -483,6 +551,8 @@ export default function AdminPage() {
                           <option value="sports">Sports</option>
                           <option value="education">Education</option>
                           <option value="health">Health</option>
+                          <option value="cleanliness">Cleanliness</option>
+                          <option value="environment">Environment</option>
                           <option value="other">Other</option>
                         </select>
                       </div>
@@ -515,13 +585,79 @@ export default function AdminPage() {
             </>
           )}
 
+          {/* Volunteers */}
+          {activeTab === 'volunteers' && (
+            <>
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-800">Volunteer Registrations ({volunteers.length})</h2>
+                  <p className="text-sm text-gray-500">People who signed up to volunteer through the website</p>
+                </div>
+              </div>
+
+              {volunteers.length === 0 ? (
+                <div className="text-center py-16 card">
+                  <FiHeart className="text-4xl text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-400">No volunteer registrations yet.</p>
+                  {!isFirebaseConfigured() && <p className="text-xs text-amber-500 mt-2">Firestore not connected — volunteers will appear when Firebase is configured.</p>}
+                </div>
+              ) : (
+                <div className="card overflow-hidden">
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
+                      <tr>
+                        <th className="text-left px-4 py-3">Name</th>
+                        <th className="text-left px-4 py-3">Phone</th>
+                        <th className="text-left px-4 py-3">Email</th>
+                        <th className="text-left px-4 py-3">Ward</th>
+                        <th className="text-left px-4 py-3">Interests</th>
+                        <th className="text-left px-4 py-3">Status</th>
+                        <th className="text-left px-4 py-3">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {volunteers.map((v) => (
+                        <tr key={v.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 font-medium text-gray-800">{v.name}</td>
+                          <td className="px-4 py-3 text-gray-500">{v.phone}</td>
+                          <td className="px-4 py-3 text-gray-500">{v.email || '\u2014'}</td>
+                          <td className="px-4 py-3 text-gray-500">{v.wardNumber ? `Ward ${v.wardNumber}` : '\u2014'}</td>
+                          <td className="px-4 py-3">
+                            <div className="flex flex-wrap gap-1">
+                              {v.interests.slice(0, 2).map((i) => (
+                                <span key={i} className="px-1.5 py-0.5 bg-blue-50 text-blue-600 text-[10px] rounded-md font-medium">
+                                  {i.replace('_', ' ')}
+                                </span>
+                              ))}
+                              {v.interests.length > 2 && (
+                                <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 text-[10px] rounded-md">+{v.interests.length - 2}</span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-4 py-3">
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${v.status === 'active' ? 'bg-green-50 text-green-600' : 'bg-amber-50 text-amber-600'}`}>
+                              {v.status}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-gray-400 text-xs">
+                            {new Date(v.createdAt).toLocaleDateString('en-IN')}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </>
+          )}
+
           {/* Users Management */}
           {activeTab === 'users' && (
             <>
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-xl font-bold text-gray-800">User Management ({users.length})</h2>
-                  <p className="text-sm text-gray-500">Manage user roles — assign corporator, admin, or citizen</p>
+                  <p className="text-sm text-gray-500">Manage user roles — assign volunteer or admin</p>
                 </div>
               </div>
 
@@ -539,7 +675,6 @@ export default function AdminPage() {
                         <th className="text-left px-4 py-3">User</th>
                         <th className="text-left px-4 py-3">Email</th>
                         <th className="text-left px-4 py-3">Role</th>
-                        <th className="text-left px-4 py-3">Ward</th>
                         <th className="text-left px-4 py-3">Joined</th>
                       </tr>
                     </thead>
@@ -551,39 +686,22 @@ export default function AdminPage() {
                               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-teal-100 flex items-center justify-center text-blue-600 font-semibold text-xs">
                                 {u.displayName?.charAt(0).toUpperCase() || 'U'}
                               </div>
-                              <span className="font-medium text-gray-800">{u.displayName || '—'}</span>
+                              <span className="font-medium text-gray-800">{u.displayName || '\u2014'}</span>
                             </div>
                           </td>
                           <td className="px-4 py-3 text-gray-500">{u.email}</td>
                           <td className="px-4 py-3">
                             <select
                               value={u.role}
-                              onChange={(e) => handleRoleChange(u.uid, e.target.value, u.wardNumber)}
+                              onChange={(e) => handleRoleChange(u.uid, e.target.value)}
                               className="px-2 py-1 border border-gray-200 rounded-lg text-xs outline-none focus:border-blue-500"
                             >
-                              <option value="citizen">Citizen</option>
-                              <option value="corporator">Corporator</option>
+                              <option value="volunteer">Volunteer</option>
                               <option value="admin">Admin</option>
                             </select>
                           </td>
-                          <td className="px-4 py-3">
-                            {u.role === 'corporator' ? (
-                              <select
-                                value={u.wardNumber || ''}
-                                onChange={(e) => handleRoleChange(u.uid, u.role, Number(e.target.value))}
-                                className="px-2 py-1 border border-gray-200 rounded-lg text-xs outline-none focus:border-blue-500"
-                              >
-                                <option value="">Select Ward</option>
-                                {wardsData.map((w) => (
-                                  <option key={w.number} value={w.number}>Ward {w.number}</option>
-                                ))}
-                              </select>
-                            ) : (
-                              <span className="text-gray-400 text-xs">—</span>
-                            )}
-                          </td>
                           <td className="px-4 py-3 text-gray-400 text-xs">
-                            {u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-IN') : '—'}
+                            {u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-IN') : '\u2014'}
                           </td>
                         </tr>
                       ))}
@@ -610,7 +728,6 @@ export default function AdminPage() {
                 </button>
               </div>
 
-              {/* Banner Placement Stats */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
                 {(['hero', 'sidebar', 'inline', 'footer'] as const).map((p) => {
                   const count = banners.filter((b) => b.placement === p).length;
@@ -627,7 +744,6 @@ export default function AdminPage() {
                 })}
               </div>
 
-              {/* Banners List by Placement */}
               {(['hero', 'sidebar', 'inline', 'footer'] as const).map((placement) => {
                 const placementBanners = banners.filter((b) => b.placement === placement);
                 if (placementBanners.length === 0) return null;
@@ -777,30 +893,23 @@ export default function AdminPage() {
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {wardsData.map((ward) => {
                   const corp = getCorporatorByWard(ward.number);
-                  const wardIssues = issues.filter((i) => i.wardNumber === ward.number);
-                  const pending = wardIssues.filter((i) => i.status === 'pending').length;
-                  const inProgress = wardIssues.filter((i) => i.status === 'in_progress').length;
-                  const resolved = wardIssues.filter((i) => i.status === 'resolved').length;
+                  const wardActivities = activities.filter((a) => a.wardNumber === ward.number);
                   return (
                     <div key={ward.number} className="card p-6">
                       <div className="text-2xl font-extrabold text-blue-600 mb-1">Ward {ward.number}</div>
                       <p className="text-sm text-gray-500 mb-3">{ward.name}</p>
                       <div className="p-3 bg-gray-50 rounded-lg mb-3">
-                        <p className="text-sm font-semibold text-gray-700">{corp?.name || 'No corporator'}</p>
+                        <p className="text-sm font-semibold text-gray-700">{corp?.name || 'No representative'}</p>
                         <p className="text-xs text-gray-400">{corp?.party || '-'}</p>
                       </div>
-                      <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                        <div className="p-2 bg-amber-50 rounded-lg">
-                          <div className="font-bold text-amber-600">{pending}</div>
-                          <div className="text-gray-400">Pending</div>
-                        </div>
+                      <div className="grid grid-cols-2 gap-2 text-center text-xs">
                         <div className="p-2 bg-blue-50 rounded-lg">
-                          <div className="font-bold text-blue-600">{inProgress}</div>
-                          <div className="text-gray-400">Progress</div>
+                          <div className="font-bold text-blue-600">{wardActivities.length}</div>
+                          <div className="text-gray-400">Activities</div>
                         </div>
-                        <div className="p-2 bg-green-50 rounded-lg">
-                          <div className="font-bold text-green-600">{resolved}</div>
-                          <div className="text-gray-400">Resolved</div>
+                        <div className="p-2 bg-teal-50 rounded-lg">
+                          <div className="font-bold text-teal-600">{ward.population ? (ward.population / 1000).toFixed(0) + 'K' : '\u2014'}</div>
+                          <div className="text-gray-400">Population</div>
                         </div>
                       </div>
                     </div>
@@ -828,7 +937,7 @@ export default function AdminPage() {
                     </div>
                     <div>
                       <label className="block text-sm text-gray-500 mb-1">Contact Phone</label>
-                      <input type="text" defaultValue="+91 98XX XXX XXX" className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-blue-500" />
+                      <input type="text" defaultValue="+91 99207 66971" className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-blue-500" />
                     </div>
                   </div>
                 </div>
@@ -851,49 +960,6 @@ export default function AdminPage() {
           )}
         </div>
       </section>
-
-      {/* Resolve Issue Modal */}
-      {showResolveModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-lg w-full shadow-2xl">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-800">Resolve Issue</h2>
-              <button onClick={() => { setShowResolveModal(false); setResolveIssueId(''); }} className="p-1 hover:bg-gray-100 rounded-lg">
-                <FiX className="text-xl text-gray-500" />
-              </button>
-            </div>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Resolution Response</label>
-                <textarea
-                  value={resolveResponse}
-                  onChange={(e) => setResolveResponse(e.target.value)}
-                  placeholder="Describe what was done to resolve this issue..."
-                  rows={3}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500 resize-none"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Resolution Image URLs</label>
-                <textarea
-                  value={resolveImageUrls}
-                  onChange={(e) => setResolveImageUrls(e.target.value)}
-                  placeholder="Paste image URLs separated by commas (e.g. https://...image1.jpg, https://...image2.jpg)"
-                  rows={2}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500 resize-none"
-                />
-                <p className="text-xs text-gray-400 mt-1">Add before/after photos or proof of resolution</p>
-              </div>
-              <div className="flex gap-3 justify-end pt-2">
-                <button onClick={() => { setShowResolveModal(false); setResolveIssueId(''); }} className="px-5 py-2.5 bg-gray-100 text-gray-600 rounded-lg font-medium text-sm">Cancel</button>
-                <button onClick={handleResolveIssue} className="px-6 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-semibold text-sm flex items-center gap-1.5">
-                  <FiCheckCircle /> Mark as Resolved
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

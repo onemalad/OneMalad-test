@@ -3,8 +3,7 @@
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FiCheckCircle, FiClock, FiLoader, FiMapPin, FiAlertCircle, FiAward, FiUsers, FiArrowLeft, FiHeart, FiEdit3 } from 'react-icons/fi';
-import { HiOutlineLocationMarker } from 'react-icons/hi';
+import { FiMapPin, FiArrowLeft, FiHeart, FiEdit3, FiCalendar, FiUsers as FiUsersIcon } from 'react-icons/fi';
 import { wardsData, getCorporatorByWard } from '@/data/wards';
 import { useStore } from '@/hooks/useStore';
 import { useAuth } from '@/context/AuthContext';
@@ -16,21 +15,30 @@ const MaladMap = dynamic(() => import('@/components/ui/MaladMap'), {
 });
 import toast from 'react-hot-toast';
 
-const statusConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  pending: { label: 'Pending', color: 'bg-amber-100 text-amber-700', icon: <FiClock /> },
-  in_progress: { label: 'In Progress', color: 'bg-blue-100 text-blue-700', icon: <FiLoader /> },
-  resolved: { label: 'Resolved', color: 'bg-green-100 text-green-700', icon: <FiCheckCircle /> },
+const activityCategoryLabels: Record<string, string> = {
+  cleanliness_drive: 'Cleanliness Drive',
+  health_camp: 'Health Camp',
+  food_distribution: 'Food Distribution',
+  education: 'Education',
+  tree_planting: 'Tree Planting',
+  blood_donation: 'Blood Donation',
+  sports: 'Sports',
+  cultural: 'Cultural',
+  infrastructure: 'Infrastructure',
+  other: 'Other',
 };
 
-const categoryColors: Record<string, string> = {
-  drainage: 'bg-amber-100 text-amber-800',
-  roads: 'bg-orange-100 text-orange-800',
-  garbage: 'bg-green-100 text-green-800',
-  water: 'bg-blue-100 text-blue-800',
-  electricity: 'bg-pink-100 text-pink-800',
-  sanitation: 'bg-purple-100 text-purple-800',
-  encroachment: 'bg-red-100 text-red-800',
-  other: 'bg-gray-100 text-gray-800',
+const activityCategoryColors: Record<string, string> = {
+  cleanliness_drive: 'bg-emerald-100 text-emerald-700',
+  health_camp: 'bg-rose-100 text-rose-700',
+  food_distribution: 'bg-orange-100 text-orange-700',
+  education: 'bg-amber-100 text-amber-700',
+  tree_planting: 'bg-green-100 text-green-700',
+  blood_donation: 'bg-red-100 text-red-700',
+  sports: 'bg-blue-100 text-blue-700',
+  cultural: 'bg-purple-100 text-purple-700',
+  infrastructure: 'bg-gray-100 text-gray-700',
+  other: 'bg-slate-100 text-slate-700',
 };
 
 export default function WardDetailClient() {
@@ -38,9 +46,9 @@ export default function WardDetailClient() {
   const wardNum = Number(params.id);
   const ward = wardsData.find((w) => w.number === wardNum);
   const corporator = getCorporatorByWard(wardNum);
-  const { issues } = useStore();
+  const { activities } = useStore();
   const { user } = useAuth();
-  const wardIssues = issues.filter((i) => i.wardNumber === wardNum);
+  const wardActivities = activities.filter((a) => a.wardNumber === wardNum);
 
   const [supportCount, setSupportCount] = useState(0);
   const [hasSupported, setHasSupported] = useState(false);
@@ -68,14 +76,14 @@ export default function WardDetailClient() {
 
   const handleSupport = async () => {
     if (!user) {
-      toast.error('Please sign in to support your corporator');
+      toast.error('Please sign in to support your representative');
       return;
     }
     setSupportLoading(true);
     try {
       const supported = await toggleSupport(wardNum, user.uid);
       setHasSupported(supported);
-      toast.success(supported ? 'You support this corporator!' : 'Support removed');
+      toast.success(supported ? 'You support this representative!' : 'Support removed');
     } catch {
       toast.error('Failed to update support');
     }
@@ -116,7 +124,7 @@ export default function WardDetailClient() {
               </span>
             </div>
 
-            {/* Right: Stats + Party */}
+            {/* Right: Stats + Representative */}
             <div className="flex flex-wrap items-end gap-4">
               {/* Quick Stats */}
               <div className="flex gap-3">
@@ -125,18 +133,16 @@ export default function WardDetailClient() {
                   <div className="text-[10px] uppercase tracking-wider opacity-70 mt-0.5">Voters</div>
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/15 text-center min-w-[80px]">
-                  <div className="text-2xl font-extrabold">{wardIssues.length}</div>
-                  <div className="text-[10px] uppercase tracking-wider opacity-70 mt-0.5">Issues</div>
+                  <div className="text-2xl font-extrabold">{ward.population ? ward.population.toLocaleString('en-IN') : '\u2014'}</div>
+                  <div className="text-[10px] uppercase tracking-wider opacity-70 mt-0.5">Population</div>
                 </div>
-                {corporator && (
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/15 text-center min-w-[80px]">
-                    <div className="text-2xl font-extrabold">{corporator.issuesResolved}</div>
-                    <div className="text-[10px] uppercase tracking-wider opacity-70 mt-0.5">Resolved</div>
-                  </div>
-                )}
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/15 text-center min-w-[80px]">
+                  <div className="text-2xl font-extrabold">{wardActivities.length}</div>
+                  <div className="text-[10px] uppercase tracking-wider opacity-70 mt-0.5">Activities</div>
+                </div>
               </div>
 
-              {/* Party Badge */}
+              {/* Representative Badge */}
               {corporator && (
                 <div className="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
                   <div className="text-sm font-bold">{corporator.name}</div>
@@ -153,7 +159,7 @@ export default function WardDetailClient() {
       <section className="py-10 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-[350px_1fr] gap-8">
-            {/* Corporator Sidebar */}
+            {/* Representative Sidebar */}
             <div className="space-y-6">
               {corporator && (
                 <div className="card p-7 sticky top-24">
@@ -178,26 +184,13 @@ export default function WardDetailClient() {
                   {corporator.bio && (
                     <p className="text-sm text-gray-500 mb-5 leading-relaxed">{corporator.bio}</p>
                   )}
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { val: corporator.achievements, lbl: 'Achievements', icon: <FiAward /> },
-                      { val: corporator.issuesReceived, lbl: 'Received', icon: <FiAlertCircle /> },
-                      { val: corporator.issuesInProgress, lbl: 'In Progress', icon: <FiLoader /> },
-                      { val: corporator.issuesResolved, lbl: 'Resolved', icon: <FiCheckCircle /> },
-                    ].map((s) => (
-                      <div key={s.lbl} className="text-center p-3 bg-gray-50 rounded-lg">
-                        <div className="text-xl font-bold text-gray-800">{s.val}</div>
-                        <p className="text-[10px] text-gray-400 uppercase tracking-wider mt-0.5">{s.lbl}</p>
-                      </div>
-                    ))}
-                  </div>
 
                   {/* I Support Button — only for logged-in users */}
                   {user ? (
                     <button
                       onClick={handleSupport}
                       disabled={supportLoading}
-                      className={`w-full mt-5 py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all ${
+                      className={`w-full mt-3 py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all ${
                         hasSupported
                           ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg shadow-pink-200'
                           : 'bg-gray-50 text-gray-700 hover:bg-pink-50 hover:text-pink-600 border border-gray-200 hover:border-pink-300'
@@ -212,7 +205,7 @@ export default function WardDetailClient() {
                       )}
                     </button>
                   ) : supportCount > 0 ? (
-                    <div className="mt-5 flex items-center justify-center gap-2 text-sm text-gray-400">
+                    <div className="mt-3 flex items-center justify-center gap-2 text-sm text-gray-400">
                       <FiHeart /> {supportCount} supporter{supportCount !== 1 ? 's' : ''}
                     </div>
                   ) : null}
@@ -244,11 +237,11 @@ export default function WardDetailClient() {
                 <MaladMap focusWard={wardNum} height="350px" showLandmarks={true} />
               </div>
 
-              {/* Corporator Updates */}
+              {/* Ward Updates */}
               {wardUpdates.length > 0 && (
                 <div className="mb-8">
                   <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <FiEdit3 className="text-teal-500" /> Corporator Updates
+                    <FiEdit3 className="text-teal-500" /> Community Updates
                   </h2>
                   <div className="space-y-4">
                     {wardUpdates.slice(0, 3).map((update) => (
@@ -276,70 +269,59 @@ export default function WardDetailClient() {
                 </div>
               )}
 
+              {/* Ward Activities */}
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-800">
-                  Ward Issues <span className="text-sm font-medium text-gray-400">({wardIssues.length})</span>
+                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                  <FiCalendar className="text-blue-500" />
+                  Foundation Activities <span className="text-sm font-medium text-gray-400">({wardActivities.length})</span>
                 </h2>
                 <Link
-                  href={`/issues?action=raise&ward=${ward.number}`}
+                  href="/our-work"
                   className="px-4 py-2 bg-gradient-to-r from-blue-600 to-teal-500 text-white text-sm font-semibold rounded-lg hover:shadow-md transition-all"
                 >
-                  + Raise Issue
+                  View All Work
                 </Link>
               </div>
 
-              {wardIssues.length > 0 ? (
+              {wardActivities.length > 0 ? (
                 <div className="space-y-4">
-                  {wardIssues.map((issue) => {
-                    const status = statusConfig[issue.status];
-                    return (
-                      <div key={issue.id} className="card p-5 card-hover">
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-teal-100 flex items-center justify-center text-blue-600 font-semibold text-sm flex-shrink-0">
-                              {issue.userName.charAt(0)}
-                            </div>
-                            <div>
-                              <p className="font-semibold text-sm text-gray-800">{issue.userName}</p>
-                              <p className="text-xs text-gray-400">
-                                {new Date(issue.createdAt).toLocaleDateString('en-IN', {
-                                  day: 'numeric',
-                                  month: 'short',
-                                  year: 'numeric',
-                                })}
-                              </p>
-                            </div>
-                          </div>
-                          <span className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${status.color}`}>
-                            {status.icon} {status.label}
-                          </span>
+                  {wardActivities.map((activity) => (
+                    <div key={activity.id} className="card p-5 card-hover">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h3 className="font-semibold text-gray-800">{activity.title}</h3>
+                          <p className="text-sm text-gray-500 line-clamp-2 mt-1">{activity.description}</p>
                         </div>
-                        <h3 className="text-base font-semibold text-gray-800 mt-3 mb-1">{issue.title}</h3>
-                        <p className="text-sm text-gray-500 line-clamp-2 mb-3">{issue.description}</p>
-                        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                          <span className={`px-2.5 py-1 rounded-md text-xs font-medium capitalize ${categoryColors[issue.category]}`}>
-                            {issue.category.replace('_', ' ')}
-                          </span>
-                          <div className="flex items-center gap-3">
-                            <span className="flex items-center gap-1 text-xs text-gray-400">
-                              <HiOutlineLocationMarker /> {issue.location.split(',')[0]}
-                            </span>
-                            <span className="text-xs text-gray-400">{issue.upvotes} upvotes</span>
-                          </div>
-                        </div>
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${activityCategoryColors[activity.category] || 'bg-gray-100 text-gray-700'}`}>
+                          {activityCategoryLabels[activity.category] || activity.category}
+                        </span>
                       </div>
-                    );
-                  })}
+                      <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100 text-sm text-gray-500">
+                        <span className="flex items-center gap-1">
+                          <FiCalendar className="text-blue-500" />
+                          {new Date(activity.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <FiMapPin className="text-blue-500" />
+                          {activity.location}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <FiUsersIcon className="text-blue-500" />
+                          {activity.volunteersCount} volunteers
+                        </span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <div className="text-center py-16 card">
-                  <FiCheckCircle className="text-4xl text-green-400 mx-auto mb-3" />
-                  <p className="text-gray-500">No issues reported for this ward yet.</p>
+                  <FiCalendar className="text-4xl text-blue-300 mx-auto mb-3" />
+                  <p className="text-gray-500">No activities recorded for this ward yet.</p>
                   <Link
-                    href={`/issues?action=raise&ward=${ward.number}`}
+                    href="/volunteer"
                     className="inline-block mt-4 text-blue-600 font-medium hover:underline text-sm"
                   >
-                    Be the first to raise an issue
+                    Volunteer for this ward
                   </Link>
                 </div>
               )}

@@ -291,11 +291,11 @@ export default function DiscoverPlaceClient() {
       {/* CTA */}
       <section className="py-12 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <h3 className="text-2xl font-extrabold text-gray-800 mb-3">Have an issue in this area?</h3>
-          <p className="text-gray-500 mb-6">Report civic problems near {place.title} and track their resolution</p>
+          <h3 className="text-2xl font-extrabold text-gray-800 mb-3">Want to help this area?</h3>
+          <p className="text-gray-500 mb-6">Join OneMalad Foundation and volunteer for community drives near {place.title}</p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link href={`/issues?action=raise&ward=${place.ward}`} className="px-6 py-3 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-bold rounded-xl hover:shadow-lg transition-all hover:-translate-y-0.5 text-sm inline-flex items-center gap-2">
-              Raise an Issue <FiArrowRight />
+            <Link href="/volunteer" className="px-6 py-3 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-bold rounded-xl hover:shadow-lg transition-all hover:-translate-y-0.5 text-sm inline-flex items-center gap-2">
+              Get Involved <FiArrowRight />
             </Link>
             <Link href={`/wards/${place.ward}`} className="px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-all text-sm inline-flex items-center gap-2">
               View Ward {place.ward} <FiMapPin />

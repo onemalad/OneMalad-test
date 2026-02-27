@@ -14,12 +14,12 @@ export default function Footer() {
               </div>
               <div>
                 <span className="text-lg font-black text-white">One<span className="text-cyan-300">Malad</span></span>
-                <span className="block text-[9px] font-semibold tracking-[0.2em] uppercase text-white/40">For the people</span>
+                <span className="block text-[9px] font-semibold tracking-[0.2em] uppercase text-white/40">Community Foundation</span>
               </div>
             </div>
             <p className="text-sm leading-relaxed mb-5">
-              Empowering Malad residents to connect with their corporators and
-              raise civic issues. Your voice matters - together we build a better Malad.
+              OneMalad Foundation — Building a stronger Malad through community service,
+              social initiatives, and grassroots engagement. Together we serve, together we grow.
             </p>
             <div className="flex gap-3">
               {[
@@ -45,10 +45,10 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {[
                 { label: 'Home', href: '/' },
-                { label: 'Wards', href: '/wards' },
-                { label: 'Corporators', href: '/corporators' },
-                { label: 'Raise an Issue', href: '/issues' },
+                { label: 'Our Work', href: '/our-work' },
                 { label: 'Events', href: '/events' },
+                { label: 'Gallery', href: '/gallery' },
+                { label: 'Volunteer', href: '/volunteer' },
               ].map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-sm hover:text-blue-400 transition-colors">

@@ -4,21 +4,15 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useStore } from '@/hooks/useStore';
-import { FiMail, FiLock, FiClock, FiCheckCircle, FiLoader, FiAlertCircle, FiArrowLeft } from 'react-icons/fi';
+import { FiMail, FiLock, FiCalendar, FiUsers, FiHeart, FiArrowLeft, FiActivity } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
-const statusConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  pending: { label: 'Pending', color: 'bg-amber-100 text-amber-700', icon: <FiClock /> },
-  in_progress: { label: 'In Progress', color: 'bg-blue-100 text-blue-700', icon: <FiLoader /> },
-  resolved: { label: 'Resolved', color: 'bg-green-100 text-green-700', icon: <FiCheckCircle /> },
-};
-
 export default function DashboardPage() {
   const router = useRouter();
   const { user, loading, signInWithGoogle, signInWithEmail, forgotPassword, logout } = useAuth();
-  const { issues } = useStore();
+  const { activities, events, impactStats } = useStore();
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -60,19 +54,19 @@ export default function DashboardPage() {
     );
   }
 
-  // Not logged in — admin/corporator sign-in only
+  // Not logged in — admin sign-in only
   if (!user) {
     return (
       <>
         <section className="page-header-gradient">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
             <h1 className="text-3xl font-bold mb-2">
-              {showForgotPassword ? 'Reset Password' : 'Admin / Corporator Login'}
+              {showForgotPassword ? 'Reset Password' : 'Foundation Admin Login'}
             </h1>
             <p className="opacity-90">
               {showForgotPassword
                 ? 'Enter your email and we\'ll send you a reset link'
-                : 'This page is for authorized personnel only'}
+                : 'This page is for authorized OneMalad Foundation personnel only'}
             </p>
           </div>
         </section>
@@ -85,7 +79,7 @@ export default function DashboardPage() {
                   {resetSent ? (
                     <div className="text-center py-4">
                       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <FiCheckCircle className="text-3xl text-green-500" />
+                        <FiMail className="text-3xl text-green-500" />
                       </div>
                       <h3 className="text-lg font-semibold text-gray-800 mb-2">Check Your Email</h3>
                       <p className="text-sm text-gray-500 mb-6">
@@ -211,7 +205,7 @@ export default function DashboardPage() {
   }
 
   // Logged in — show dashboard
-  const allIssues = issues;
+  const upcomingEvents = events.filter((e) => new Date(e.date) >= new Date()).length;
 
   return (
     <>
@@ -236,14 +230,6 @@ export default function DashboardPage() {
                   Admin Panel
                 </Link>
               )}
-              {user.role === 'corporator' && (
-                <Link
-                  href="/corporator-panel"
-                  className="px-4 py-2 bg-white/15 border border-white/25 rounded-lg text-sm font-medium hover:bg-white/25 transition-all"
-                >
-                  Corporator Panel
-                </Link>
-              )}
               <button
                 onClick={() => { logout(); router.push('/'); }}
                 className="px-4 py-2 bg-red-500/80 rounded-lg text-sm font-medium hover:bg-red-500 transition-all"
@@ -257,13 +243,13 @@ export default function DashboardPage() {
 
       <section className="py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          {/* Stats — all issues across platform */}
+          {/* Foundation Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
             {[
-              { label: 'Total Issues', val: allIssues.length, icon: <FiAlertCircle />, color: 'text-blue-600' },
-              { label: 'Pending', val: allIssues.filter((i) => i.status === 'pending').length, icon: <FiClock />, color: 'text-amber-600' },
-              { label: 'In Progress', val: allIssues.filter((i) => i.status === 'in_progress').length, icon: <FiLoader />, color: 'text-blue-600' },
-              { label: 'Resolved', val: allIssues.filter((i) => i.status === 'resolved').length, icon: <FiCheckCircle />, color: 'text-green-600' },
+              { label: 'Activities', val: activities.length, icon: <FiActivity />, color: 'text-blue-600' },
+              { label: 'Upcoming Events', val: upcomingEvents, icon: <FiCalendar />, color: 'text-purple-600' },
+              { label: 'Impact Areas', val: impactStats.length, icon: <FiHeart />, color: 'text-rose-600' },
+              { label: 'Wards Covered', val: 5, icon: <FiUsers />, color: 'text-teal-600' },
             ].map((s) => (
               <div key={s.label} className="card p-5 text-center">
                 <div className={`text-2xl ${s.color} flex justify-center mb-1`}>{s.icon}</div>
@@ -275,24 +261,17 @@ export default function DashboardPage() {
 
           {/* Quick Actions */}
           <div className="grid sm:grid-cols-3 gap-4 mb-10">
-            {user.role === 'corporator' && (
-              <Link href="/corporator-panel" className="card p-5 card-hover text-center">
-                <div className="text-2xl mb-2">&#128221;</div>
-                <h3 className="font-semibold text-gray-800">Corporator Panel</h3>
-                <p className="text-sm text-gray-500">Manage & respond to issues</p>
-              </Link>
-            )}
             {user.role === 'admin' && (
               <Link href="/admin" className="card p-5 card-hover text-center">
                 <div className="text-2xl mb-2">&#9881;&#65039;</div>
                 <h3 className="font-semibold text-gray-800">Admin Panel</h3>
-                <p className="text-sm text-gray-500">Manage platform</p>
+                <p className="text-sm text-gray-500">Manage foundation platform</p>
               </Link>
             )}
-            <Link href="/issues" className="card p-5 card-hover text-center">
+            <Link href="/our-work" className="card p-5 card-hover text-center">
               <div className="text-2xl mb-2">&#128203;</div>
-              <h3 className="font-semibold text-gray-800">All Issues</h3>
-              <p className="text-sm text-gray-500">View all civic complaints</p>
+              <h3 className="font-semibold text-gray-800">Our Work</h3>
+              <p className="text-sm text-gray-500">View all foundation activities</p>
             </Link>
             <Link href="/wards" className="card p-5 card-hover text-center">
               <div className="text-2xl mb-2">&#128506;</div>
@@ -301,32 +280,29 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          {/* Recent Issues */}
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Recent Issues</h2>
-          {allIssues.length > 0 ? (
+          {/* Recent Activities */}
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Recent Activities</h2>
+          {activities.length > 0 ? (
             <div className="space-y-3">
-              {allIssues.slice(0, 10).map((issue) => {
-                const status = statusConfig[issue.status];
-                return (
-                  <div key={issue.id} className="card p-5">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <h3 className="font-semibold text-gray-800">{issue.title}</h3>
-                        <p className="text-sm text-gray-500 mt-1">
-                          {issue.userName} &middot; Ward {issue.wardNumber} &middot; {issue.location}
-                        </p>
-                      </div>
-                      <span className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${status.color}`}>
-                        {status.icon} {status.label}
-                      </span>
+              {activities.slice(0, 10).map((activity) => (
+                <div key={activity.id} className="card p-5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="font-semibold text-gray-800">{activity.title}</h3>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {activity.location} &middot; {new Date(activity.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </p>
                     </div>
+                    <span className="text-xs font-medium bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full whitespace-nowrap">
+                      {activity.volunteersCount} volunteers
+                    </span>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           ) : (
             <div className="card p-10 text-center">
-              <p className="text-gray-400">No issues raised yet</p>
+              <p className="text-gray-400">No activities recorded yet</p>
             </div>
           )}
         </div>

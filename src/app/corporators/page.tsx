@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { HiOutlineSearch } from 'react-icons/hi';
-import { FiAward, FiAlertCircle, FiLoader, FiCheckCircle } from 'react-icons/fi';
+import { FiMapPin, FiUsers } from 'react-icons/fi';
 import { corporatorsData, getWardByNumber } from '@/data/wards';
 
 export default function CorporatorsPage() {
@@ -32,9 +32,9 @@ export default function CorporatorsPage() {
           </div>
 
           <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl font-bold mb-3">BMC Corporators</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-3">Community Representatives</h1>
             <p className="text-base opacity-90 mb-6">
-              Find your ward corporator and see the issues they are handling
+              Meet the elected representatives serving Malad&apos;s wards
             </p>
             <div className="max-w-lg mx-auto relative">
               <HiOutlineSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 text-lg" />
@@ -81,21 +81,25 @@ export default function CorporatorsPage() {
                       </p>
                     </div>
 
+                    {corp.bio && (
+                      <p className="text-sm text-gray-500 text-center line-clamp-2 mb-4">{corp.bio}</p>
+                    )}
+
                     <div className="grid grid-cols-2 gap-2 pt-4 border-t border-gray-100">
-                      {[
-                        { val: corp.achievements, lbl: 'Works', icon: <FiAward className="text-amber-500" /> },
-                        { val: corp.issuesReceived, lbl: 'Received', icon: <FiAlertCircle className="text-red-400" /> },
-                        { val: corp.issuesInProgress, lbl: 'In Progress', icon: <FiLoader className="text-blue-500" /> },
-                        { val: corp.issuesResolved, lbl: 'Resolved', icon: <FiCheckCircle className="text-green-500" /> },
-                      ].map((s) => (
-                        <div key={s.lbl} className="text-center p-2.5 bg-gray-50 rounded-lg">
-                          <div className="flex items-center justify-center gap-1">
-                            {s.icon}
-                            <span className="text-base font-bold text-gray-800">{s.val}</span>
-                          </div>
-                          <p className="text-[10px] text-gray-400 uppercase tracking-wider">{s.lbl}</p>
+                      <div className="text-center p-2.5 bg-gray-50 rounded-lg">
+                        <div className="flex items-center justify-center gap-1">
+                          <FiMapPin className="text-blue-500" />
+                          <span className="text-base font-bold text-gray-800">{ward?.landmarks.length || 0}</span>
                         </div>
-                      ))}
+                        <p className="text-[10px] text-gray-400 uppercase tracking-wider">Landmarks</p>
+                      </div>
+                      <div className="text-center p-2.5 bg-gray-50 rounded-lg">
+                        <div className="flex items-center justify-center gap-1">
+                          <FiUsers className="text-teal-500" />
+                          <span className="text-base font-bold text-gray-800">{ward?.population ? (ward.population / 1000).toFixed(0) + 'K' : '\u2014'}</span>
+                        </div>
+                        <p className="text-[10px] text-gray-400 uppercase tracking-wider">Population</p>
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -105,7 +109,7 @@ export default function CorporatorsPage() {
 
           {filtered.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-gray-400 text-lg">No corporators found matching &quot;{search}&quot;</p>
+              <p className="text-gray-400 text-lg">No representatives found matching &quot;{search}&quot;</p>
             </div>
           )}
         </div>

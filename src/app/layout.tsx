@@ -11,25 +11,25 @@ import './globals.css';
 
 const SITE_URL = 'https://onemalad.in';
 const SITE_NAME = 'OneMalad';
-const SITE_DESC = 'OneMalad is Malad\'s civic engagement platform — raise local issues, track ward developments, connect with your corporator, discover iconic places like Marve Beach & Madh Fort, and participate in community events across all 5 wards of Malad, Mumbai.';
+const SITE_DESC = 'OneMalad Foundation — Building a stronger Malad through community service, social initiatives, and grassroots engagement. Volunteer for cleanliness drives, health camps, food distribution, education programs, and more across all 5 wards of Malad, Mumbai.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'OneMalad — Malad\'s Civic Engagement Platform | Raise Issues, Track Wards, Discover Malad',
+    default: 'OneMalad — Community Foundation | Serving Malad Through Action',
     template: '%s | OneMalad',
   },
   description: SITE_DESC,
   keywords: [
-    'OneMalad', 'Malad', 'Malad West', 'Malad East', 'Malwani', 'Marve Beach', 'Madh Fort', 'Aksa Beach',
-    'BMC', 'civic engagement', 'ward', 'corporator', 'Mumbai', 'P North Ward', 'P South Ward',
-    'raise issues Malad', 'Malad ward corporator', 'Malad community', 'civic platform Mumbai',
-    'Malad issues', 'Malwani community', 'Madh Island', 'St Bonaventure Church Malad',
-    'Malad events', 'Malad development', 'Mumbai local governance', 'BMC complaints Malad',
+    'OneMalad', 'OneMalad Foundation', 'Malad', 'Malad West', 'Malad East', 'Malwani', 'Marve Beach', 'Madh Fort',
+    'community foundation', 'volunteer Malad', 'social service Mumbai', 'cleanliness drive Malad',
+    'health camp Malad', 'food distribution Mumbai', 'tree planting Malad', 'blood donation Malad',
+    'P North Ward', 'P South Ward', 'Malad community', 'Malad events', 'Malad development',
+    'NGO Malad', 'community service Mumbai', 'youth empowerment Malad',
   ],
-  authors: [{ name: 'OneMalad', url: SITE_URL }],
-  creator: 'OneMalad',
-  publisher: 'OneMalad',
+  authors: [{ name: 'OneMalad Foundation', url: SITE_URL }],
+  creator: 'OneMalad Foundation',
+  publisher: 'OneMalad Foundation',
   formatDetection: { email: false, address: false, telephone: false },
   alternates: {
     canonical: SITE_URL,
@@ -39,12 +39,12 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: 'OneMalad — Malad\'s Civic Engagement Platform',
+    title: 'OneMalad — Community Foundation | Serving Malad Through Action',
     description: SITE_DESC,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'OneMalad — Malad\'s Civic Engagement Platform',
+    title: 'OneMalad — Community Foundation',
     description: SITE_DESC,
     creator: '@OneMalad',
   },
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  category: 'civic engagement',
+  category: 'community',
 };
 
 export const viewport: Viewport = {

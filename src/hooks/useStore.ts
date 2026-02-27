@@ -1,91 +1,62 @@
 import { create } from 'zustand';
-import { Issue, CommunityEvent } from '@/types';
-import { sampleIssues, sampleEvents } from '@/data/issues';
+import { Activity, CommunityEvent, ImpactStat } from '@/types';
+import { sampleActivities, sampleEvents, impactStats as defaultImpactStats } from '@/data/activities';
 import {
   isFirebaseConfigured,
-  subscribeToIssues,
+  subscribeToActivities,
   subscribeToEvents,
-  createIssueInFirestore,
-  updateIssueInFirestore,
-  deleteIssueFromFirestore,
+  createActivityInFirestore,
+  deleteActivityFromFirestore,
   createEventInFirestore,
   deleteEventFromFirestore,
 } from '@/lib/firestore';
 
 interface StoreState {
-  issues: Issue[];
+  activities: Activity[];
   events: CommunityEvent[];
+  impactStats: ImpactStat[];
   firestoreReady: boolean;
 
   // Internal setters for Firestore sync
-  _setIssues: (issues: Issue[]) => void;
+  _setActivities: (activities: Activity[]) => void;
   _setEvents: (events: CommunityEvent[]) => void;
+  _setImpactStats: (stats: ImpactStat[]) => void;
   _setFirestoreReady: (ready: boolean) => void;
 
   // Public actions
-  addIssue: (issue: Issue) => void;
-  updateIssueStatus: (id: string, status: Issue['status'], response?: string) => void;
-  deleteIssue: (id: string) => void;
-  upvoteIssue: (id: string) => void;
+  addActivity: (activity: Activity) => void;
+  deleteActivity: (id: string) => void;
   addEvent: (event: CommunityEvent) => void;
   deleteEvent: (id: string) => void;
 }
 
-export const useStore = create<StoreState>((set, get) => ({
+export const useStore = create<StoreState>((set) => ({
   // Start with sample data; Firestore will override when connected
-  issues: sampleIssues,
+  activities: sampleActivities,
   events: sampleEvents,
+  impactStats: defaultImpactStats,
   firestoreReady: false,
 
-  _setIssues: (issues) => set({ issues }),
+  _setActivities: (activities) => set({ activities }),
   _setEvents: (events) => set({ events }),
+  _setImpactStats: (stats) => set({ impactStats: stats }),
   _setFirestoreReady: (ready) => set({ firestoreReady: ready }),
 
-  addIssue: (issue) => {
+  addActivity: (activity) => {
     if (isFirebaseConfigured()) {
-      const { id, ...data } = issue;
-      createIssueInFirestore(data).catch(console.error);
-      // Real-time listener will update local state
+      const { id, ...data } = activity;
+      createActivityInFirestore(data).catch(console.error);
     } else {
-      set((state) => ({ issues: [issue, ...state.issues] }));
+      set((state) => ({ activities: [activity, ...state.activities] }));
     }
   },
 
-  updateIssueStatus: (id, status, response) => {
-    const data: Record<string, unknown> = {
-      status,
-      updatedAt: new Date().toISOString(),
-    };
-    if (response) data.corporatorResponse = response;
-    if (status === 'resolved') data.resolvedAt = new Date().toISOString();
-
+  deleteActivity: (id) => {
     if (isFirebaseConfigured()) {
-      updateIssueInFirestore(id, data as Partial<Issue>).catch(console.error);
+      deleteActivityFromFirestore(id).catch(console.error);
     } else {
-      set((state) => ({
-        issues: state.issues.map((i) => (i.id === id ? { ...i, ...(data as Partial<Issue>) } : i)),
-      }));
+      set((state) => ({ activities: state.activities.filter((a) => a.id !== id) }));
     }
-  },
-
-  deleteIssue: (id) => {
-    if (isFirebaseConfigured()) {
-      deleteIssueFromFirestore(id).catch(console.error);
-    } else {
-      set((state) => ({ issues: state.issues.filter((i) => i.id !== id) }));
-    }
-  },
-
-  upvoteIssue: (id) => {
-    const current = get().issues.find((i) => i.id === id);
-    const newCount = (current?.upvotes || 0) + 1;
-    if (isFirebaseConfigured()) {
-      updateIssueInFirestore(id, { upvotes: newCount } as Partial<Issue>).catch(console.error);
-    }
-    // Optimistic update for both modes
-    set((state) => ({
-      issues: state.issues.map((i) => (i.id === id ? { ...i, upvotes: newCount } : i)),
-    }));
   },
 
   addEvent: (event) => {
@@ -115,8 +86,8 @@ export function initFirestoreSync(): () => void {
   const store = useStore.getState();
   store._setFirestoreReady(true);
 
-  const unsubIssues = subscribeToIssues((issues) => {
-    useStore.getState()._setIssues(issues);
+  const unsubActivities = subscribeToActivities((activities) => {
+    useStore.getState()._setActivities(activities);
   });
 
   const unsubEvents = subscribeToEvents((events) => {
@@ -124,7 +95,7 @@ export function initFirestoreSync(): () => void {
   });
 
   return () => {
-    unsubIssues();
+    unsubActivities();
     unsubEvents();
     _initialized = false;
   };

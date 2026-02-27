@@ -72,10 +72,6 @@ export const corporatorsData: Corporator[] = [
     votes: 8677,
     photo: '/corporators/ward-32.jfif',
     bio: 'Geeta Kiran Bhandari is a dedicated community leader representing Ward 32. A veteran corporator who also won in 2017, she has been actively working on improving infrastructure from Jankalyan Old MHADA through Marve to Manori Village.',
-    achievements: 12,
-    issuesReceived: 145,
-    issuesInProgress: 23,
-    issuesResolved: 98,
   },
   {
     id: 'corp-33',
@@ -85,10 +81,6 @@ export const corporatorsData: Corporator[] = [
     votes: 12644,
     photo: '/corporators/ward-33.jfif',
     bio: 'Qumarjahan Siddiqui represents the Rathodi and Malwani 6 No ward. Sister of MLA Aslam Shaikh, she has been instrumental in improving public amenities and sanitation in the area.',
-    achievements: 15,
-    issuesReceived: 178,
-    issuesInProgress: 31,
-    issuesResolved: 112,
   },
   {
     id: 'corp-34',
@@ -98,10 +90,6 @@ export const corporatorsData: Corporator[] = [
     votes: 16622,
     photo: '/corporators/ward-34.jfif',
     bio: 'Haider Aslam Shaikh serves Ward 34 covering Malwani 1 No to NCC including Gate 6 and Gate 7. Son of Congress MLA Aslam Shaikh, he focuses on infrastructure development and water supply improvements in the Malwani area.',
-    achievements: 10,
-    issuesReceived: 210,
-    issuesInProgress: 45,
-    issuesResolved: 130,
   },
   {
     id: 'corp-48',
@@ -111,10 +99,6 @@ export const corporatorsData: Corporator[] = [
     votes: 13154,
     photo: '/corporators/ward-48.png',
     bio: 'Rafiq Iliyas Shaikh has been working to improve the residential infrastructure in the Malwani MHADA colony and Malwani 7 No area of Ward 48.',
-    achievements: 8,
-    issuesReceived: 120,
-    issuesInProgress: 18,
-    issuesResolved: 82,
   },
   {
     id: 'corp-49',
@@ -124,10 +108,6 @@ export const corporatorsData: Corporator[] = [
     votes: 10733,
     photo: '/corporators/ward-49.webp',
     bio: 'Sangeeta Chandrakant Koli represents the Madh Island and Ambujwadi areas. She is committed to improving infrastructure, housing conditions, and public spaces across Ward 49.',
-    achievements: 9,
-    issuesReceived: 98,
-    issuesInProgress: 15,
-    issuesResolved: 68,
   },
 ];
 
