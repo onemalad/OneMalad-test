@@ -20,6 +20,8 @@ export default function Navbar() {
     { href: '/our-work', label: 'Our Work' },
     { href: '/wards', label: 'Wards' },
     { href: '/events', label: 'Events' },
+    { href: '/directory', label: 'Directory' },
+    { href: '/helplines', label: 'Helplines' },
   ];
 
   const isActive = (href: string) => {
@@ -42,8 +44,8 @@ export default function Navbar() {
                 href={link.href}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   isActive(link.href)
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                    ? 'text-emerald-700 bg-emerald-50'
+                    : 'text-gray-600 hover:text-emerald-700 hover:bg-emerald-50'
                 }`}
               >
                 {link.label}
@@ -52,7 +54,7 @@ export default function Navbar() {
 
             <Link
               href="/volunteer"
-              className="ml-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white text-sm font-semibold rounded-lg flex items-center gap-1.5 hover:shadow-md transition-all hover:-translate-y-0.5"
+              className="ml-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-sm font-semibold rounded-lg flex items-center gap-1.5 hover:shadow-md transition-all hover:-translate-y-0.5"
             >
               <FiHeart className="text-lg" />
               Get Involved
@@ -63,7 +65,7 @@ export default function Navbar() {
               <div className="relative ml-2">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-100 to-teal-100 flex items-center justify-center text-blue-600 font-semibold text-sm hover:shadow-md transition-all"
+                  className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center text-emerald-700 font-semibold text-sm hover:shadow-md transition-all"
                 >
                   {user.displayName?.charAt(0).toUpperCase() || 'U'}
                 </button>
@@ -72,7 +74,7 @@ export default function Navbar() {
                     <div className="px-4 py-2 border-b border-gray-100">
                       <p className="font-semibold text-sm text-gray-800">{user.displayName}</p>
                       <p className="text-xs text-gray-400">{user.email}</p>
-                      <span className="inline-block mt-1 px-2 py-0.5 bg-blue-50 text-blue-600 text-xs font-medium rounded-full capitalize">
+                      <span className="inline-block mt-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-medium rounded-full capitalize">
                         {user.role}
                       </span>
                     </div>
@@ -127,7 +129,7 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(false)}
                 className={`block px-4 py-3 text-sm font-medium transition-all ${
                   isActive(link.href)
-                    ? 'text-blue-600 bg-blue-50'
+                    ? 'text-emerald-700 bg-emerald-50'
                     : 'text-gray-600 hover:bg-gray-50'
                 }`}
               >
@@ -137,7 +139,7 @@ export default function Navbar() {
             <Link
               href="/volunteer"
               onClick={() => setMobileOpen(false)}
-              className="block mx-4 mt-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white text-sm font-semibold rounded-lg text-center"
+              className="block mx-4 mt-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-sm font-semibold rounded-lg text-center"
             >
               Get Involved
             </Link>

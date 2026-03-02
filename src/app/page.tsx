@@ -88,9 +88,9 @@ export default function HomePage() {
   return (
     <>
       {/* 1. Hero Section */}
-      <section className="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white relative overflow-hidden min-h-[85vh] flex items-center">
+      <section className="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 text-white relative overflow-hidden min-h-[85vh] flex items-center">
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" />
           <div className="absolute bottom-10 right-10 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-3xl" />
         </div>
@@ -100,30 +100,30 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/10 mb-8">
-                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-sm font-medium text-blue-200">Serving Malad Wards 32, 33, 34, 48, 49</span>
+                <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                <span className="text-sm font-medium text-emerald-200">Serving Malad Wards 32, 33, 34, 48, 49</span>
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold leading-[1.1] mb-6">
                 Building a Better{' '}
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300 bg-clip-text text-transparent">
                   Malad, Together
                 </span>
               </h1>
-              <p className="text-lg text-blue-200/80 mb-8 leading-relaxed max-w-xl">
+              <p className="text-lg text-emerald-200/80 mb-8 leading-relaxed max-w-xl">
                 OneMalad Foundation serves the people of Malad through community service, health camps, cleanliness drives, food distribution, and grassroots initiatives. Join us in making a difference.
               </p>
               <div className="flex flex-wrap gap-3 mb-8">
                 <Link href="/our-work" className="px-7 py-3.5 bg-white text-gray-900 font-bold rounded-xl hover:shadow-xl hover:shadow-white/10 transition-all hover:-translate-y-0.5 inline-flex items-center gap-2 text-sm">
                   Our Work <FiArrowRight />
                 </Link>
-                <Link href="/volunteer" className="px-7 py-3.5 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-bold rounded-xl hover:shadow-xl hover:shadow-blue-500/20 transition-all hover:-translate-y-0.5 inline-flex items-center gap-2 text-sm border border-white/10">
+                <Link href="/volunteer" className="px-7 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-bold rounded-xl hover:shadow-xl hover:shadow-emerald-500/20 transition-all hover:-translate-y-0.5 inline-flex items-center gap-2 text-sm border border-white/10">
                   Get Involved <FiHeart />
                 </Link>
               </div>
-              <div className="flex items-center gap-5 text-sm text-blue-300/60">
-                <span className="flex items-center gap-1.5"><FiCheckCircle className="text-green-400" /> 100% volunteer-driven</span>
-                <span className="flex items-center gap-1.5"><FiCheckCircle className="text-green-400" /> 5 wards served</span>
-                <span className="flex items-center gap-1.5"><FiCheckCircle className="text-green-400" /> Open to all</span>
+              <div className="flex items-center gap-5 text-sm text-emerald-300/60">
+                <span className="flex items-center gap-1.5"><FiCheckCircle className="text-emerald-400" /> 100% volunteer-driven</span>
+                <span className="flex items-center gap-1.5"><FiCheckCircle className="text-emerald-400" /> 5 wards served</span>
+                <span className="flex items-center gap-1.5"><FiCheckCircle className="text-emerald-400" /> Open to all</span>
               </div>
             </div>
 
@@ -133,7 +133,7 @@ export default function HomePage() {
                   <div key={stat.id} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/15 hover:scale-105 transition-transform duration-300">
                     <span className="text-2xl mb-3 block">{stat.emoji}</span>
                     <div className="text-3xl font-extrabold text-white mb-1">{stat.value.toLocaleString()}{stat.suffix}</div>
-                    <p className="text-sm text-blue-200/60">{stat.label}</p>
+                    <p className="text-sm text-emerald-200/60">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -145,7 +145,7 @@ export default function HomePage() {
             {impactStats.slice(0, 3).map((stat) => (
               <div key={stat.id} className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/10 text-center">
                 <div className="text-xl font-extrabold">{stat.value.toLocaleString()}{stat.suffix}</div>
-                <p className="text-[10px] text-blue-200/70 mt-0.5">{stat.label}</p>
+                <p className="text-[10px] text-emerald-200/70 mt-0.5">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -174,7 +174,7 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900" />
             <div className="absolute inset-0 opacity-10">
               <div className="absolute top-0 right-0 w-72 h-72 bg-teal-400 rounded-full blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-400 rounded-full blur-3xl" />
             </div>
             <div className="relative p-8 sm:p-12">
               <div className="text-center mb-8">
@@ -204,7 +204,7 @@ export default function HomePage() {
               <h2 className="text-3xl font-extrabold text-gray-800">Recent Activities</h2>
               <p className="text-gray-500 mt-1">Latest foundation work across Malad</p>
             </div>
-            <Link href="/our-work" className="text-blue-600 font-semibold hover:underline flex items-center gap-1">
+            <Link href="/our-work" className="text-emerald-600 font-semibold hover:underline flex items-center gap-1">
               View All <FiArrowRight />
             </Link>
           </div>
@@ -216,7 +216,7 @@ export default function HomePage() {
                     {activityCategoryLabels[activity.category]}
                   </span>
                   {activity.wardNumber && (
-                    <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">
+                    <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md">
                       Ward {activity.wardNumber}
                     </span>
                   )}
@@ -247,9 +247,9 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-[1fr_400px] gap-12 items-center">
             <div>
-              <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full mb-4 uppercase tracking-wider">About Us</span>
+              <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full mb-4 uppercase tracking-wider">About Us</span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-6 leading-tight">
-                What is <span className="bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">OneMalad</span>?
+                What is <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">OneMalad</span>?
               </h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
@@ -266,8 +266,8 @@ export default function HomePage() {
                 </p>
               </div>
               <div className="flex flex-wrap gap-3 mt-6">
-                <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-lg">
-                  <FiCheckCircle className="text-blue-600" />
+                <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-lg">
+                  <FiCheckCircle className="text-emerald-600" />
                   <span className="text-sm font-medium text-gray-700">100% Volunteer-Driven</span>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 bg-green-50 rounded-lg">
@@ -284,18 +284,18 @@ export default function HomePage() {
             {/* Logo / Brand Card */}
             <div className="flex justify-center">
               <div className="relative">
-                <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 via-teal-500/20 to-cyan-500/20 rounded-3xl blur-xl" />
+                <div className="absolute -inset-4 bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-cyan-500/20 rounded-3xl blur-xl" />
                 <div className="relative bg-white rounded-3xl p-10 shadow-2xl border border-gray-100 text-center">
-                  <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-teal-500 rounded-2xl flex items-center justify-center text-white text-4xl font-extrabold mx-auto mb-6 shadow-lg shadow-blue-200">
+                  <div className="w-24 h-24 bg-gradient-to-br from-emerald-600 to-teal-500 rounded-2xl flex items-center justify-center text-white text-4xl font-extrabold mx-auto mb-6 shadow-lg shadow-emerald-200">
                     1
                   </div>
                   <h3 className="text-2xl font-extrabold text-gray-800 mb-1">
-                    <span className="text-blue-600">One</span><span className="text-teal-500">Malad</span>
+                    <span className="text-emerald-600">One</span><span className="text-teal-500">Malad</span>
                   </h3>
                   <p className="text-xs text-gray-400 uppercase tracking-[0.2em] mb-6">Community Foundation</p>
                   <div className="space-y-3 text-left">
                     <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                      <FiMapPin className="text-blue-500 flex-shrink-0" />
+                      <FiMapPin className="text-emerald-600 flex-shrink-0" />
                       <span className="text-sm text-gray-600">5 Wards Served</span>
                     </div>
                     <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
@@ -319,11 +319,11 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full mb-3 uppercase tracking-wider">Wards</span>
+              <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full mb-3 uppercase tracking-wider">Wards</span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800">Malad Wards</h2>
               <p className="text-gray-500 mt-1">The 5 wards we serve across Malad</p>
             </div>
-            <Link href="/wards" className="text-blue-600 font-semibold hover:underline flex items-center gap-1">
+            <Link href="/wards" className="text-emerald-600 font-semibold hover:underline flex items-center gap-1">
               All Wards <FiArrowRight />
             </Link>
           </div>
@@ -336,7 +336,7 @@ export default function HomePage() {
                     <img src={ward.image} alt={ward.name} className="w-full h-32 object-cover" />
                   )}
                   <div className="p-5">
-                    <h3 className="font-bold text-gray-800 group-hover:text-blue-600 transition-colors mb-1">
+                    <h3 className="font-bold text-gray-800 group-hover:text-emerald-600 transition-colors mb-1">
                       {ward.name}
                     </h3>
                     <p className="text-xs text-gray-400 mb-3">{ward.area}</p>
@@ -345,7 +345,7 @@ export default function HomePage() {
                         {corp.photo ? (
                           <img src={corp.photo} alt={corp.name} className="w-7 h-7 rounded-full object-cover" />
                         ) : (
-                          <div className="w-7 h-7 bg-gradient-to-br from-blue-100 to-teal-100 rounded-full flex items-center justify-center text-blue-700 text-xs font-bold">
+                          <div className="w-7 h-7 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full flex items-center justify-center text-emerald-700 text-xs font-bold">
                             {corp.name.charAt(0)}
                           </div>
                         )}
@@ -357,7 +357,7 @@ export default function HomePage() {
                     )}
                     <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                       <span className="text-xs text-gray-400">{ward.population?.toLocaleString('en-IN')} residents</span>
-                      <span className="text-xs text-blue-600 font-semibold group-hover:underline flex items-center gap-1">
+                      <span className="text-xs text-emerald-600 font-semibold group-hover:underline flex items-center gap-1">
                         View <FiArrowRight />
                       </span>
                     </div>
@@ -369,13 +369,37 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* MyNagarSevak Promotion */}
+      <section className="py-12 bg-gradient-to-r from-orange-50 via-amber-50 to-yellow-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+          <span className="inline-block bg-orange-100 text-orange-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4">
+            For Your Ward
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-3">
+            Have an Issue in Your Ward?
+          </h2>
+          <p className="text-gray-500 max-w-xl mx-auto mb-6">
+            Report civic issues like potholes, water problems, garbage, streetlights, and more directly to your corporator through MyNagarSevak.
+          </p>
+          <a
+            href="https://mynagarsevak.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-orange-300/50 hover:-translate-y-0.5 transition-all duration-300 text-sm"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+            Raise an Issue on MyNagarSevak.in
+          </a>
+        </div>
+      </section>
+
       {/* 7. Discover Malad */}
       <section className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <span className="inline-block px-3 py-1 bg-teal-50 text-teal-600 text-xs font-bold rounded-full mb-4 uppercase tracking-wider">Explore</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-3">
-              Discover <span className="bg-gradient-to-r from-teal-500 to-blue-600 bg-clip-text text-transparent">Malad</span>
+              Discover <span className="bg-gradient-to-r from-teal-500 to-emerald-600 bg-clip-text text-transparent">Malad</span>
             </h2>
             <p className="text-gray-500 max-w-2xl mx-auto">From historic forts and serene beaches to vibrant markets and community landmarks &mdash; explore what makes Malad special</p>
           </div>
@@ -441,11 +465,11 @@ export default function HomePage() {
                   </div>
                   <div className="p-5">
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors">{place.title}</h3>
+                      <h3 className="text-lg font-bold text-gray-800 group-hover:text-emerald-600 transition-colors">{place.title}</h3>
                       <span className="text-[10px] text-gray-400 font-medium ml-auto">Ward {place.ward}</span>
                     </div>
                     <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">{place.desc}</p>
-                    <span className="inline-flex items-center gap-1 text-xs text-blue-600 font-semibold mt-3 group-hover:underline">
+                    <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-semibold mt-3 group-hover:underline">
                       Read More <FiArrowRight className="text-[10px]" />
                     </span>
                   </div>
@@ -569,7 +593,7 @@ export default function HomePage() {
                 <h2 className="text-3xl font-extrabold text-gray-800">Upcoming Events</h2>
                 <p className="text-gray-500 mt-1">Foundation events and community gatherings</p>
               </div>
-              <Link href="/events" className="text-blue-600 font-semibold hover:underline flex items-center gap-1">
+              <Link href="/events" className="text-emerald-600 font-semibold hover:underline flex items-center gap-1">
                 All Events <FiArrowRight />
               </Link>
             </div>
@@ -608,7 +632,7 @@ export default function HomePage() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { title: 'Community Service', desc: 'Regular cleanliness drives, health camps, and food distribution across all 5 wards.', icon: <FiHeart className="text-2xl" />, color: 'from-blue-500 to-blue-600' },
+              { title: 'Community Service', desc: 'Regular cleanliness drives, health camps, and food distribution across all 5 wards.', icon: <FiHeart className="text-2xl" />, color: 'from-emerald-500 to-emerald-600' },
               { title: 'Unity in Action', desc: 'Bringing together people from all communities and faiths to serve as one Malad.', icon: <FiUsers className="text-2xl" />, color: 'from-teal-500 to-green-500' },
               { title: 'Youth Empowerment', desc: 'Engaging the next generation through sports, education, and digital literacy programs.', icon: <FiArrowRight className="text-2xl" />, color: 'from-amber-500 to-orange-500' },
               { title: 'Transparent Impact', desc: 'Every activity documented with real numbers. See our work, verify our impact.', icon: <FiCheckCircle className="text-2xl" />, color: 'from-purple-500 to-indigo-500' },
@@ -629,7 +653,7 @@ export default function HomePage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="relative rounded-3xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700" />
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-700 via-emerald-800 to-teal-800" />
             <div className="absolute inset-0">
               <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3" />
               <div className="absolute bottom-0 left-0 w-72 h-72 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/3" />
@@ -638,7 +662,7 @@ export default function HomePage() {
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4">
                 Join the OneMalad Movement
               </h2>
-              <p className="text-lg text-blue-100/80 max-w-2xl mx-auto mb-10">
+              <p className="text-lg text-emerald-100/80 max-w-2xl mx-auto mb-10">
                 Volunteer with us, attend our events, and help build the Malad we all deserve. Every hand makes a difference.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-4">
@@ -649,7 +673,7 @@ export default function HomePage() {
                   View Our Work <FiArrowRight />
                 </Link>
               </div>
-              <p className="text-sm text-blue-200/50 mt-6">No registration needed. Just show up and serve.</p>
+              <p className="text-sm text-emerald-200/50 mt-6">No registration needed. Just show up and serve.</p>
             </div>
           </div>
         </div>

@@ -37,7 +37,7 @@ const volunteerRoles = [
     title: 'Organize Drives',
     desc: 'Lead cleanliness drives, tree plantations, and awareness campaigns in your ward.',
     icon: <FiPackage className="text-xl" />,
-    gradient: 'from-blue-500 to-blue-600',
+    gradient: 'from-emerald-500 to-emerald-600',
   },
   {
     title: 'Assist at Camps',
@@ -134,7 +134,7 @@ export default function VolunteerPage() {
           </span>
           <h1 className="text-3xl sm:text-4xl font-bold mb-3">
             Join the{' '}
-            <span className="bg-gradient-to-r from-cyan-300 to-teal-200 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-300 to-teal-200 bg-clip-text text-transparent">
               OneMalad
             </span>{' '}
             Movement
@@ -169,7 +169,7 @@ export default function VolunteerPage() {
                       setInterests([]);
                       setMessage('');
                     }}
-                    className="px-6 py-3 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all"
+                    className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all"
                   >
                     Register Another Volunteer
                   </button>
@@ -194,7 +194,7 @@ export default function VolunteerPage() {
                           onChange={(e) => setName(e.target.value)}
                           placeholder="Enter your full name"
                           required
-                          className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                          className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                         />
                       </div>
                     </div>
@@ -212,7 +212,7 @@ export default function VolunteerPage() {
                           onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                           placeholder="10-digit phone number"
                           required
-                          className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                          className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                         />
                       </div>
                       {phone.length > 0 && phone.length < 10 && (
@@ -232,7 +232,7 @@ export default function VolunteerPage() {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="your@email.com"
-                          className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                          className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                         />
                       </div>
                     </div>
@@ -247,7 +247,7 @@ export default function VolunteerPage() {
                         <select
                           value={wardNumber}
                           onChange={(e) => setWardNumber(e.target.value ? Number(e.target.value) : '')}
-                          className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none bg-white"
+                          className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all appearance-none bg-white"
                         >
                           <option value="">Select your ward (optional)</option>
                           {wardsData.map((ward) => (
@@ -272,8 +272,8 @@ export default function VolunteerPage() {
                             onClick={() => toggleInterest(opt.value)}
                             className={`px-3 py-2 rounded-xl text-xs font-medium border transition-all ${
                               interests.includes(opt.value)
-                                ? 'bg-blue-50 text-blue-700 border-blue-300 ring-1 ring-blue-200'
-                                : 'bg-white text-gray-500 border-gray-200 hover:border-blue-200 hover:text-blue-600'
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-300 ring-1 ring-emerald-200'
+                                : 'bg-white text-gray-500 border-gray-200 hover:border-emerald-200 hover:text-emerald-600'
                             }`}
                           >
                             {opt.label}
@@ -293,7 +293,7 @@ export default function VolunteerPage() {
                         placeholder="Tell us why you want to volunteer or any skills you can offer..."
                         rows={3}
                         maxLength={200}
-                        className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                        className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all resize-none"
                       />
                       <p className="text-xs text-gray-400 text-right mt-1">
                         {message.length}/200
@@ -304,7 +304,7 @@ export default function VolunteerPage() {
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="w-full py-3 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-blue-200/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
+                      className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-emerald-200/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
                     >
                       {submitting ? (
                         <>
@@ -337,7 +337,7 @@ export default function VolunteerPage() {
                       .map((stat) => (
                         <div
                           key={stat.id}
-                          className="bg-gray-50 rounded-xl p-3 text-center hover:bg-blue-50 transition-colors"
+                          className="bg-gray-50 rounded-xl p-3 text-center hover:bg-emerald-50 transition-colors"
                         >
                           <span className="text-xl block mb-1">{stat.emoji}</span>
                           <div className="text-lg font-extrabold text-gray-800">
@@ -362,7 +362,7 @@ export default function VolunteerPage() {
                   {volunteerRoles.map((role) => (
                     <div
                       key={role.title}
-                      className="flex items-start gap-3 p-3 rounded-xl bg-gray-50 hover:bg-blue-50 transition-colors"
+                      className="flex items-start gap-3 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-colors"
                     >
                       <div
                         className={`w-10 h-10 bg-gradient-to-br ${role.gradient} rounded-lg flex items-center justify-center text-white flex-shrink-0`}
@@ -388,7 +388,7 @@ export default function VolunteerPage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="relative rounded-3xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700" />
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-700 via-emerald-800 to-teal-800" />
             <div className="absolute inset-0">
               <div className="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3" />
               <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/3" />
@@ -397,7 +397,7 @@ export default function VolunteerPage() {
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
                 Every Volunteer Counts
               </h2>
-              <p className="text-base text-blue-100/80 max-w-xl mx-auto">
+              <p className="text-base text-emerald-100/80 max-w-xl mx-auto">
                 Whether you have an hour or a whole day, your time and effort can transform lives in Malad. Together, we are OneMalad.
               </p>
             </div>

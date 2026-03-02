@@ -58,8 +58,8 @@ export default function EventsPage() {
                 onClick={() => setFilter(f.val)}
                 className={`px-4 py-2 rounded-full text-sm font-medium border transition-all ${
                   filter === f.val
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white text-gray-500 border-gray-200 hover:border-blue-200'
+                    ? 'bg-emerald-600 text-white border-emerald-600'
+                    : 'bg-white text-gray-500 border-gray-200 hover:border-emerald-200'
                 }`}
               >
                 {f.label}
@@ -71,8 +71,8 @@ export default function EventsPage() {
           {upcoming.length > 0 && (
             <div className="mb-12">
               <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                <FiCalendar className="text-blue-500" /> Upcoming Events
-                <span className="text-xs font-medium bg-blue-50 text-blue-600 px-3 py-1 rounded-full">
+                <FiCalendar className="text-emerald-600" /> Upcoming Events
+                <span className="text-xs font-medium bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full">
                   {upcoming.length}
                 </span>
               </h2>
@@ -83,7 +83,7 @@ export default function EventsPage() {
                       <span className={`px-2.5 py-1 rounded-md text-xs font-semibold capitalize ${categoryBadge[event.category] || 'bg-gray-100 text-gray-700'}`}>
                         {event.category}
                       </span>
-                      <span className="text-xs text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded-md">
+                      <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-1 rounded-md">
                         {Math.ceil((new Date(event.date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} days left
                       </span>
                     </div>
@@ -91,7 +91,7 @@ export default function EventsPage() {
                     <p className="text-sm text-gray-500 line-clamp-2 mb-4">{event.description}</p>
                     <div className="space-y-2 text-sm text-gray-500">
                       <p className="flex items-center gap-2">
-                        <FiClock className="text-blue-500 flex-shrink-0" />
+                        <FiClock className="text-emerald-600 flex-shrink-0" />
                         {new Date(event.date).toLocaleDateString('en-IN', {
                           weekday: 'short',
                           day: 'numeric',
@@ -100,15 +100,15 @@ export default function EventsPage() {
                         })}
                       </p>
                       <p className="flex items-center gap-2">
-                        <FiClock className="text-blue-500 flex-shrink-0" />
+                        <FiClock className="text-emerald-600 flex-shrink-0" />
                         {event.time}
                       </p>
                       <p className="flex items-center gap-2">
-                        <FiMapPin className="text-blue-500 flex-shrink-0" />
+                        <FiMapPin className="text-emerald-600 flex-shrink-0" />
                         {event.location}
                       </p>
                       <p className="flex items-center gap-2">
-                        <FiUsers className="text-blue-500 flex-shrink-0" />
+                        <FiUsers className="text-emerald-600 flex-shrink-0" />
                         {event.attendees} attending
                       </p>
                     </div>

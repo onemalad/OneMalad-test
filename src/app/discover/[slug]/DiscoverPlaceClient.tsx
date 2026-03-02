@@ -20,7 +20,7 @@ export default function DiscoverPlaceClient() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Place Not Found</h1>
           <p className="text-gray-500 mb-4">This place doesn&apos;t exist in our directory.</p>
-          <Link href="/#discover" className="text-blue-600 font-medium hover:underline">
+          <Link href="/#discover" className="text-emerald-600 font-medium hover:underline">
             &larr; Back to Discover Malad
           </Link>
         </div>
@@ -181,14 +181,14 @@ export default function DiscoverPlaceClient() {
               </div>
 
               {/* Visit Info */}
-              <div className="mt-8 card p-6 bg-gradient-to-br from-blue-50 to-teal-50 border-blue-100">
+              <div className="mt-8 card p-6 bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-100">
                 <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <HiOutlineSparkles className="text-blue-500" /> Visitor Info
+                  <HiOutlineSparkles className="text-emerald-600" /> Visitor Info
                 </h3>
                 <div className="space-y-3">
                   {place.bestTimeToVisit && (
                     <div className="flex items-start gap-3">
-                      <FiClock className="text-blue-500 mt-0.5 flex-shrink-0" />
+                      <FiClock className="text-emerald-600 mt-0.5 flex-shrink-0" />
                       <div>
                         <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Best Time to Visit</p>
                         <p className="text-sm text-gray-700">{place.bestTimeToVisit}</p>
@@ -226,11 +226,11 @@ export default function DiscoverPlaceClient() {
                 <Link href={`/wards/${ward.number}`} className="card p-5 card-hover block group">
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">This Place is in</p>
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-teal-500 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-teal-500 rounded-xl flex items-center justify-center text-white font-bold text-lg">
                       {ward.number}
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-gray-800 group-hover:text-blue-600 transition-colors">Ward {ward.number}</p>
+                      <p className="text-sm font-bold text-gray-800 group-hover:text-emerald-600 transition-colors">Ward {ward.number}</p>
                       <p className="text-xs text-gray-400">{ward.zone} &middot; {ward.area}</p>
                     </div>
                   </div>
@@ -250,12 +250,12 @@ export default function DiscoverPlaceClient() {
                     {corporator.photo ? (
                       <img src={corporator.photo} alt={corporator.name} className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md" />
                     ) : (
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-teal-500 rounded-full flex items-center justify-center text-white font-bold">
+                      <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-teal-500 rounded-full flex items-center justify-center text-white font-bold">
                         {corporator.name.charAt(0)}
                       </div>
                     )}
                     <div>
-                      <p className="text-sm font-bold text-gray-800 group-hover:text-blue-600 transition-colors">{corporator.name}</p>
+                      <p className="text-sm font-bold text-gray-800 group-hover:text-emerald-600 transition-colors">{corporator.name}</p>
                       <p className="text-xs text-gray-500">{corporator.party}</p>
                       <p className="text-[10px] text-gray-400">{corporator.votes.toLocaleString()} votes</p>
                     </div>
@@ -273,13 +273,13 @@ export default function DiscoverPlaceClient() {
                         <img src={p.images[0]} alt={p.title} className="w-full h-full object-cover" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition-colors truncate">{p.title}</p>
+                        <p className="text-sm font-semibold text-gray-800 group-hover:text-emerald-600 transition-colors truncate">{p.title}</p>
                         <p className="text-[10px] text-gray-400">Ward {p.ward} &middot; {p.tag}</p>
                       </div>
                     </Link>
                   ))}
                 </div>
-                <Link href="/#discover" className="inline-flex items-center gap-1 text-xs text-blue-600 font-semibold mt-4 hover:underline">
+                <Link href="/#discover" className="inline-flex items-center gap-1 text-xs text-emerald-600 font-semibold mt-4 hover:underline">
                   View all places <FiArrowRight className="text-[10px]" />
                 </Link>
               </div>
@@ -294,7 +294,7 @@ export default function DiscoverPlaceClient() {
           <h3 className="text-2xl font-extrabold text-gray-800 mb-3">Want to help this area?</h3>
           <p className="text-gray-500 mb-6">Join OneMalad Foundation and volunteer for community drives near {place.title}</p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link href="/volunteer" className="px-6 py-3 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-bold rounded-xl hover:shadow-lg transition-all hover:-translate-y-0.5 text-sm inline-flex items-center gap-2">
+            <Link href="/volunteer" className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-bold rounded-xl hover:shadow-lg transition-all hover:-translate-y-0.5 text-sm inline-flex items-center gap-2">
               Get Involved <FiArrowRight />
             </Link>
             <Link href={`/wards/${place.ward}`} className="px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-all text-sm inline-flex items-center gap-2">

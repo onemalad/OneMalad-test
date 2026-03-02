@@ -67,7 +67,7 @@ export default function CorporatorsPage() {
                           className="w-20 h-20 rounded-full object-cover mx-auto mb-3 border-3 border-white shadow-md"
                         />
                       ) : (
-                        <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-teal-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3 border-3 border-white shadow-md">
+                        <div className="w-20 h-20 bg-gradient-to-br from-emerald-600 to-teal-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3 border-3 border-white shadow-md">
                           {corp.name.charAt(0)}
                         </div>
                       )}
@@ -76,7 +76,7 @@ export default function CorporatorsPage() {
                       </span>
                       <h3 className="text-lg font-bold text-gray-800">{corp.name}</h3>
                       <p className="text-sm text-gray-500">{corp.party}</p>
-                      <p className="text-xs text-blue-600 font-medium mt-1">
+                      <p className="text-xs text-emerald-600 font-medium mt-1">
                         Ward {corp.wardNumber} &middot; {ward?.zone || ''}
                       </p>
                     </div>
@@ -88,7 +88,7 @@ export default function CorporatorsPage() {
                     <div className="grid grid-cols-2 gap-2 pt-4 border-t border-gray-100">
                       <div className="text-center p-2.5 bg-gray-50 rounded-lg">
                         <div className="flex items-center justify-center gap-1">
-                          <FiMapPin className="text-blue-500" />
+                          <FiMapPin className="text-emerald-600" />
                           <span className="text-base font-bold text-gray-800">{ward?.landmarks.length || 0}</span>
                         </div>
                         <p className="text-[10px] text-gray-400 uppercase tracking-wider">Landmarks</p>
@@ -112,6 +112,22 @@ export default function CorporatorsPage() {
               <p className="text-gray-400 text-lg">No representatives found matching &quot;{search}&quot;</p>
             </div>
           )}
+
+          {/* MyNagarSevak Promotion */}
+          <div className="mt-10 rounded-2xl bg-gradient-to-r from-orange-50 via-amber-50 to-yellow-50 border border-orange-200 p-8 text-center">
+            <h3 className="text-xl font-bold text-gray-800 mb-2">Want to Raise an Issue with Your Corporator?</h3>
+            <p className="text-gray-500 text-sm max-w-lg mx-auto mb-5">
+              Use MyNagarSevak to report civic issues like potholes, water problems, garbage collection, and more directly to your ward corporator.
+            </p>
+            <a
+              href="https://mynagarsevak.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-7 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-orange-300/50 hover:-translate-y-0.5 transition-all duration-300 text-sm"
+            >
+              Raise an Issue on MyNagarSevak.in
+            </a>
+          </div>
         </div>
       </section>
     </>

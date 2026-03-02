@@ -11,7 +11,7 @@
   }
 
   ::selection {
-    @apply bg-blue-600/20 text-blue-900;
+    @apply bg-emerald-600/20 text-emerald-900;
   }
 }
 
@@ -25,7 +25,7 @@
   }
 
   .btn-primary {
-    @apply px-6 py-3 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0;
+    @apply px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0;
   }
 
   .btn-secondary {
@@ -33,7 +33,7 @@
   }
 
   .page-header-gradient {
-    @apply bg-gradient-to-br from-blue-600 via-blue-700 to-teal-600 text-white py-12 sm:py-16;
+    @apply bg-gradient-to-br from-emerald-700 via-emerald-800 to-teal-700 text-white py-12 sm:py-16;
   }
 
   .stat-card {
@@ -41,7 +41,7 @@
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent;
   }
 
   .glass {
@@ -96,7 +96,7 @@
   inset: 0;
   border-radius: inherit;
   padding: 1.5px;
-  background: linear-gradient(135deg, #2563eb, #14b8a6);
+  background: linear-gradient(135deg, #059669, #14b8a6);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;

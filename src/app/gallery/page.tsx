@@ -131,8 +131,8 @@ export default function GalleryPage() {
                 onClick={() => setFilter(f.val)}
                 className={`px-4 py-2 rounded-full text-sm font-medium border transition-all ${
                   filter === f.val
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white text-gray-500 border-gray-200 hover:border-blue-200'
+                    ? 'bg-emerald-600 text-white border-emerald-600'
+                    : 'bg-white text-gray-500 border-gray-200 hover:border-emerald-200'
                 }`}
               >
                 {f.val !== 'all' && (

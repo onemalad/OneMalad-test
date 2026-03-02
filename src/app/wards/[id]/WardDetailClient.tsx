@@ -96,7 +96,7 @@ export default function WardDetailClient() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Ward Not Found</h1>
           <p className="text-gray-500 mb-4">This ward doesn&apos;t exist in our system.</p>
-          <Link href="/wards" className="text-blue-600 font-medium hover:underline">
+          <Link href="/wards" className="text-emerald-600 font-medium hover:underline">
             &larr; Back to Wards
           </Link>
         </div>
@@ -171,7 +171,7 @@ export default function WardDetailClient() {
                         className="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-white shadow-lg"
                       />
                     ) : (
-                      <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-teal-500 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 border-4 border-white shadow-lg">
+                      <div className="w-24 h-24 bg-gradient-to-br from-emerald-600 to-teal-500 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 border-4 border-white shadow-lg">
                         {corporator.name.charAt(0)}
                       </div>
                     )}
@@ -212,6 +212,22 @@ export default function WardDetailClient() {
                 </div>
               )}
 
+              {/* MyNagarSevak Promotion */}
+              <div className="card p-6 bg-gradient-to-br from-orange-50 to-amber-50 border-orange-200">
+                <h3 className="text-sm font-bold text-gray-800 mb-2">Have an Issue in this Ward?</h3>
+                <p className="text-xs text-gray-500 mb-4">
+                  Report civic problems like potholes, water supply, garbage, or streetlights directly to your corporator.
+                </p>
+                <a
+                  href="https://mynagarsevak.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full text-center px-4 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-orange-200/50 hover:-translate-y-0.5 transition-all duration-300 text-sm"
+                >
+                  Raise Issue on MyNagarSevak.in
+                </a>
+              </div>
+
               {/* Ward Info */}
               <div className="card p-6">
                 <h4 className="font-semibold text-gray-800 mb-3">About This Ward</h4>
@@ -232,7 +248,7 @@ export default function WardDetailClient() {
               {/* Ward Map */}
               <div className="mb-8">
                 <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <FiMapPin className="text-blue-500" /> Ward {ward.number} Map
+                  <FiMapPin className="text-emerald-600" /> Ward {ward.number} Map
                 </h2>
                 <MaladMap focusWard={wardNum} height="350px" showLandmarks={true} />
               </div>
@@ -272,12 +288,12 @@ export default function WardDetailClient() {
               {/* Ward Activities */}
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                  <FiCalendar className="text-blue-500" />
+                  <FiCalendar className="text-emerald-600" />
                   Foundation Activities <span className="text-sm font-medium text-gray-400">({wardActivities.length})</span>
                 </h2>
                 <Link
                   href="/our-work"
-                  className="px-4 py-2 bg-gradient-to-r from-blue-600 to-teal-500 text-white text-sm font-semibold rounded-lg hover:shadow-md transition-all"
+                  className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-sm font-semibold rounded-lg hover:shadow-md transition-all"
                 >
                   View All Work
                 </Link>
@@ -298,15 +314,15 @@ export default function WardDetailClient() {
                       </div>
                       <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100 text-sm text-gray-500">
                         <span className="flex items-center gap-1">
-                          <FiCalendar className="text-blue-500" />
+                          <FiCalendar className="text-emerald-600" />
                           {new Date(activity.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                         </span>
                         <span className="flex items-center gap-1">
-                          <FiMapPin className="text-blue-500" />
+                          <FiMapPin className="text-emerald-600" />
                           {activity.location}
                         </span>
                         <span className="flex items-center gap-1">
-                          <FiUsersIcon className="text-blue-500" />
+                          <FiUsersIcon className="text-emerald-600" />
                           {activity.volunteersCount} volunteers
                         </span>
                       </div>
@@ -315,11 +331,11 @@ export default function WardDetailClient() {
                 </div>
               ) : (
                 <div className="text-center py-16 card">
-                  <FiCalendar className="text-4xl text-blue-300 mx-auto mb-3" />
+                  <FiCalendar className="text-4xl text-emerald-300 mx-auto mb-3" />
                   <p className="text-gray-500">No activities recorded for this ward yet.</p>
                   <Link
                     href="/volunteer"
-                    className="inline-block mt-4 text-blue-600 font-medium hover:underline text-sm"
+                    className="inline-block mt-4 text-emerald-600 font-medium hover:underline text-sm"
                   >
                     Volunteer for this ward
                   </Link>

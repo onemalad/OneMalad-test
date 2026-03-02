@@ -49,7 +49,7 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
       </div>
     );
   }
@@ -87,7 +87,7 @@ export default function DashboardPage() {
                       </p>
                       <button
                         onClick={() => { setShowForgotPassword(false); setResetSent(false); }}
-                        className="text-blue-600 font-medium text-sm hover:underline flex items-center gap-1 mx-auto"
+                        className="text-emerald-600 font-medium text-sm hover:underline flex items-center gap-1 mx-auto"
                       >
                         <FiArrowLeft /> Back to Sign In
                       </button>
@@ -104,7 +104,7 @@ export default function DashboardPage() {
                               value={email}
                               onChange={(e) => setEmail(e.target.value)}
                               placeholder="you@example.com"
-                              className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                              className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                               required
                             />
                           </div>
@@ -112,14 +112,14 @@ export default function DashboardPage() {
                         <button
                           type="submit"
                           disabled={authLoading}
-                          className="w-full py-3 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-semibold rounded-lg hover:shadow-md transition-all disabled:opacity-50"
+                          className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-semibold rounded-lg hover:shadow-md transition-all disabled:opacity-50"
                         >
                           {authLoading ? 'Sending...' : 'Send Reset Link'}
                         </button>
                       </form>
                       <button
                         onClick={() => setShowForgotPassword(false)}
-                        className="text-blue-600 font-medium text-sm hover:underline flex items-center gap-1 mx-auto mt-5"
+                        className="text-emerald-600 font-medium text-sm hover:underline flex items-center gap-1 mx-auto mt-5"
                       >
                         <FiArrowLeft /> Back to Sign In
                       </button>
@@ -157,7 +157,7 @@ export default function DashboardPage() {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="admin@onemalad.in"
-                          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                           required
                         />
                       </div>
@@ -169,7 +169,7 @@ export default function DashboardPage() {
                         <button
                           type="button"
                           onClick={() => setShowForgotPassword(true)}
-                          className="text-xs text-blue-600 hover:underline font-medium"
+                          className="text-xs text-emerald-600 hover:underline font-medium"
                         >
                           Forgot password?
                         </button>
@@ -181,7 +181,7 @@ export default function DashboardPage() {
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="Your password"
-                          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                           required
                         />
                       </div>
@@ -190,7 +190,7 @@ export default function DashboardPage() {
                     <button
                       type="submit"
                       disabled={authLoading}
-                      className="w-full py-3 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all disabled:opacity-50 hover:-translate-y-0.5 active:translate-y-0"
+                      className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-emerald-500/25 transition-all disabled:opacity-50 hover:-translate-y-0.5 active:translate-y-0"
                     >
                       {authLoading ? 'Signing in...' : 'Sign In'}
                     </button>
@@ -246,7 +246,7 @@ export default function DashboardPage() {
           {/* Foundation Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
             {[
-              { label: 'Activities', val: activities.length, icon: <FiActivity />, color: 'text-blue-600' },
+              { label: 'Activities', val: activities.length, icon: <FiActivity />, color: 'text-emerald-600' },
               { label: 'Upcoming Events', val: upcomingEvents, icon: <FiCalendar />, color: 'text-purple-600' },
               { label: 'Impact Areas', val: impactStats.length, icon: <FiHeart />, color: 'text-rose-600' },
               { label: 'Wards Covered', val: 5, icon: <FiUsers />, color: 'text-teal-600' },
@@ -293,7 +293,7 @@ export default function DashboardPage() {
                         {activity.location} &middot; {new Date(activity.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </p>
                     </div>
-                    <span className="text-xs font-medium bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full whitespace-nowrap">
+                    <span className="text-xs font-medium bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-full whitespace-nowrap">
                       {activity.volunteersCount} volunteers
                     </span>
                   </div>

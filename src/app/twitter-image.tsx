@@ -10,7 +10,7 @@ export default async function Image() {
     (
       <div
         style={{
-          background: 'linear-gradient(135deg, #1e3a5f 0%, #0f172a 50%, #1e293b 100%)',
+          background: 'linear-gradient(135deg, #064e3b 0%, #0f172a 50%, #1e293b 100%)',
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -46,7 +46,7 @@ export default async function Image() {
               width: '64px',
               height: '64px',
               borderRadius: '16px',
-              background: 'linear-gradient(135deg, #2563eb, #14b8a6)',
+              background: 'linear-gradient(135deg, #059669, #14b8a6)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -79,7 +79,7 @@ export default async function Image() {
             left: '0',
             right: '0',
             height: '4px',
-            background: 'linear-gradient(90deg, #2563eb, #14b8a6, #38bdf8)',
+            background: 'linear-gradient(90deg, #059669, #14b8a6, #34d399)',
             display: 'flex',
           }}
         />

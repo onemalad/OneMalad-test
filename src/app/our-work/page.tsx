@@ -77,8 +77,8 @@ export default function OurWorkPage() {
                 onClick={() => setFilter(f.val)}
                 className={`px-4 py-2 rounded-full text-sm font-medium border transition-all ${
                   filter === f.val
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white text-gray-500 border-gray-200 hover:border-blue-200'
+                    ? 'bg-emerald-600 text-white border-emerald-600'
+                    : 'bg-white text-gray-500 border-gray-200 hover:border-emerald-200'
                 }`}
               >
                 {f.label}
@@ -125,7 +125,7 @@ export default function OurWorkPage() {
                   {/* Details */}
                   <div className="space-y-2 text-sm text-gray-500">
                     <p className="flex items-center gap-2">
-                      <FiCalendar className="text-blue-500 flex-shrink-0" />
+                      <FiCalendar className="text-emerald-600 flex-shrink-0" />
                       {new Date(activity.date).toLocaleDateString('en-IN', {
                         day: 'numeric',
                         month: 'long',
@@ -133,14 +133,14 @@ export default function OurWorkPage() {
                       })}
                     </p>
                     <p className="flex items-center gap-2">
-                      <FiMapPin className="text-blue-500 flex-shrink-0" />
+                      <FiMapPin className="text-emerald-600 flex-shrink-0" />
                       {activity.location}
                     </p>
                   </div>
 
                   {/* Badges */}
                   <div className="flex flex-wrap gap-3 mt-4 pt-3 border-t border-gray-100">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-medium bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-medium bg-emerald-50 text-emerald-600 px-3 py-1.5 rounded-full">
                       <FiUsers className="w-3.5 h-3.5" />
                       {activity.volunteersCount} Volunteers
                     </span>

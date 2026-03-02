@@ -29,10 +29,10 @@ import { db } from '@/lib/firebase';
 
 const DEFAULT_BANNERS: Banner[] = [
   { id: 'b1', title: 'OneMalad Cricket Premier League 2026', subtitle: 'Register your ward team now!', ctaText: 'Register Now', ctaLink: '/events', placement: 'hero', bgGradient: 'from-violet-600 via-purple-600 to-indigo-700', active: true },
-  { id: 'b2', title: 'Join the OneMalad Movement', subtitle: 'Volunteer for community drives in your ward', ctaText: 'Get Involved', ctaLink: '/volunteer', placement: 'hero', bgGradient: 'from-blue-600 via-cyan-600 to-teal-500', active: true },
+  { id: 'b2', title: 'Join the OneMalad Movement', subtitle: 'Volunteer for community drives in your ward', ctaText: 'Get Involved', ctaLink: '/volunteer', placement: 'hero', bgGradient: 'from-emerald-600 via-teal-600 to-cyan-500', active: true },
   { id: 'b3', title: 'Advertise Here', subtitle: 'Reach 50,000+ Malad residents', ctaText: 'Contact Us', ctaLink: '#', placement: 'sidebar', bgGradient: 'from-gray-100 to-gray-50', active: true },
   { id: 'b4', title: 'Free Health Camp - Feb 28', subtitle: 'General checkup, eye testing, dental checkup', ctaText: 'Learn More', ctaLink: '/events', placement: 'inline', bgGradient: 'from-emerald-500 to-teal-600', active: true },
-  { id: 'b5', title: 'Partner with OneMalad', subtitle: 'Local businesses & organizations - lets build Malad together', ctaText: 'Get in Touch', ctaLink: '#', placement: 'footer', bgGradient: 'from-violet-600 to-blue-600', active: true },
+  { id: 'b5', title: 'Partner with OneMalad', subtitle: 'Local businesses & organizations - lets build Malad together', ctaText: 'Get in Touch', ctaLink: '#', placement: 'footer', bgGradient: 'from-emerald-700 to-teal-600', active: true },
 ];
 
 const activityCategories: { val: ActivityCategory; label: string }[] = [
@@ -125,7 +125,7 @@ export default function AdminPage() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Access Denied</h1>
           <p className="text-gray-500 mb-4">You need admin access to view this page.</p>
-          <Link href="/dashboard" className="text-blue-600 font-medium hover:underline">Go to Dashboard</Link>
+          <Link href="/dashboard" className="text-emerald-600 font-medium hover:underline">Go to Dashboard</Link>
         </div>
       </div>
     );
@@ -317,7 +317,7 @@ export default function AdminPage() {
             <>
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
                 {[
-                  { label: 'Activities', val: activities.length, icon: <FiActivity />, color: 'text-blue-600' },
+                  { label: 'Activities', val: activities.length, icon: <FiActivity />, color: 'text-emerald-600' },
                   { label: 'Volunteers', val: volunteers.length, icon: <FiHeart />, color: 'text-rose-600' },
                   { label: 'Events', val: upcomingEvents, icon: <FiCalendar />, color: 'text-purple-600' },
                   { label: 'Users', val: users.length, icon: <FiUsers />, color: 'text-teal-600' },
@@ -356,7 +356,7 @@ export default function AdminPage() {
                           <h4 className="font-semibold text-gray-800">Ward {ward.number}</h4>
                           <p className="text-xs text-gray-400">{corp?.name || 'No representative'}</p>
                         </div>
-                        <span className="text-sm font-bold text-blue-600">{wardActivities.length}</span>
+                        <span className="text-sm font-bold text-emerald-600">{wardActivities.length}</span>
                       </div>
                       <p className="text-xs text-gray-400">{wardActivities.length} activities &middot; {ward.population ? ward.population.toLocaleString('en-IN') : '\u2014'} population</p>
                     </div>
@@ -382,7 +382,7 @@ export default function AdminPage() {
                         <td className="px-4 py-3 font-medium text-gray-800">{corp.name}</td>
                         <td className="px-4 py-3 text-gray-500">Ward {corp.wardNumber}</td>
                         <td className="px-4 py-3 text-gray-500">{corp.party}</td>
-                        <td className="px-4 py-3 text-center text-blue-600 font-medium">{corp.votes.toLocaleString()}</td>
+                        <td className="px-4 py-3 text-center text-emerald-600 font-medium">{corp.votes.toLocaleString()}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -398,7 +398,7 @@ export default function AdminPage() {
                 <h2 className="text-xl font-bold text-gray-800">Activities ({activities.length})</h2>
                 <button
                   onClick={() => setShowActivityModal(true)}
-                  className="px-4 py-2 bg-gradient-to-r from-blue-600 to-teal-500 text-white text-sm font-semibold rounded-lg flex items-center gap-1.5"
+                  className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-sm font-semibold rounded-lg flex items-center gap-1.5"
                 >
                   <FiPlus /> New Activity
                 </button>
@@ -443,11 +443,11 @@ export default function AdminPage() {
                     <form onSubmit={handleAddActivity} className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Activity Title *</label>
-                        <input type="text" value={actTitle} onChange={(e) => setActTitle(e.target.value)} placeholder="Activity name" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" required />
+                        <input type="text" value={actTitle} onChange={(e) => setActTitle(e.target.value)} placeholder="Activity name" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" required />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                        <select value={actCategory} onChange={(e) => setActCategory(e.target.value as ActivityCategory)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500">
+                        <select value={actCategory} onChange={(e) => setActCategory(e.target.value as ActivityCategory)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500">
                           {activityCategories.map((c) => (
                             <option key={c.val} value={c.val}>{c.label}</option>
                           ))}
@@ -455,16 +455,16 @@ export default function AdminPage() {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                        <textarea value={actDesc} onChange={(e) => setActDesc(e.target.value)} rows={3} placeholder="Activity description" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500 resize-y" />
+                        <textarea value={actDesc} onChange={(e) => setActDesc(e.target.value)} rows={3} placeholder="Activity description" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500 resize-y" />
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">Date *</label>
-                          <input type="date" value={actDate} onChange={(e) => setActDate(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" required />
+                          <input type="date" value={actDate} onChange={(e) => setActDate(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" required />
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">Ward</label>
-                          <select value={actWard} onChange={(e) => setActWard(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500">
+                          <select value={actWard} onChange={(e) => setActWard(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500">
                             <option value="">All Wards</option>
                             {wardsData.map((w) => (
                               <option key={w.number} value={w.number}>Ward {w.number}</option>
@@ -474,21 +474,21 @@ export default function AdminPage() {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Location *</label>
-                        <input type="text" value={actLocation} onChange={(e) => setActLocation(e.target.value)} placeholder="e.g. Marve Beach, Malad West" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" required />
+                        <input type="text" value={actLocation} onChange={(e) => setActLocation(e.target.value)} placeholder="e.g. Marve Beach, Malad West" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" required />
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">Volunteers</label>
-                          <input type="number" value={actVolunteers} onChange={(e) => setActVolunteers(e.target.value)} placeholder="0" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" />
+                          <input type="number" value={actVolunteers} onChange={(e) => setActVolunteers(e.target.value)} placeholder="0" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" />
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">Beneficiaries</label>
-                          <input type="number" value={actBeneficiaries} onChange={(e) => setActBeneficiaries(e.target.value)} placeholder="0" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" />
+                          <input type="number" value={actBeneficiaries} onChange={(e) => setActBeneficiaries(e.target.value)} placeholder="0" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" />
                         </div>
                       </div>
                       <div className="flex gap-3 justify-end pt-2">
                         <button type="button" onClick={() => setShowActivityModal(false)} className="px-5 py-2.5 bg-gray-100 text-gray-600 rounded-lg font-medium text-sm">Cancel</button>
-                        <button type="submit" className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-lg font-semibold text-sm">Create Activity</button>
+                        <button type="submit" className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 text-white rounded-lg font-semibold text-sm">Create Activity</button>
                       </div>
                     </form>
                   </div>
@@ -504,7 +504,7 @@ export default function AdminPage() {
                 <h2 className="text-xl font-bold text-gray-800">Events ({events.length})</h2>
                 <button
                   onClick={() => setShowEventModal(true)}
-                  className="px-4 py-2 bg-gradient-to-r from-blue-600 to-teal-500 text-white text-sm font-semibold rounded-lg flex items-center gap-1.5"
+                  className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-sm font-semibold rounded-lg flex items-center gap-1.5"
                 >
                   <FiPlus /> New Event
                 </button>
@@ -541,11 +541,11 @@ export default function AdminPage() {
                     <form onSubmit={handleAddEvent} className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Event Title *</label>
-                        <input type="text" value={eventTitle} onChange={(e) => setEventTitle(e.target.value)} placeholder="Event name" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" required />
+                        <input type="text" value={eventTitle} onChange={(e) => setEventTitle(e.target.value)} placeholder="Event name" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" required />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                        <select value={eventCategory} onChange={(e) => setEventCategory(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500">
+                        <select value={eventCategory} onChange={(e) => setEventCategory(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500">
                           <option value="social">Social</option>
                           <option value="cultural">Cultural</option>
                           <option value="sports">Sports</option>
@@ -558,25 +558,25 @@ export default function AdminPage() {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                        <textarea value={eventDesc} onChange={(e) => setEventDesc(e.target.value)} rows={3} placeholder="Event description" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500 resize-y" />
+                        <textarea value={eventDesc} onChange={(e) => setEventDesc(e.target.value)} rows={3} placeholder="Event description" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500 resize-y" />
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">Date *</label>
-                          <input type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" required />
+                          <input type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" required />
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
-                          <input type="text" value={eventTime} onChange={(e) => setEventTime(e.target.value)} placeholder="e.g. 5:00 PM - 9:00 PM" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" />
+                          <input type="text" value={eventTime} onChange={(e) => setEventTime(e.target.value)} placeholder="e.g. 5:00 PM - 9:00 PM" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" />
                         </div>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Venue *</label>
-                        <input type="text" value={eventVenue} onChange={(e) => setEventVenue(e.target.value)} placeholder="Event venue" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" required />
+                        <input type="text" value={eventVenue} onChange={(e) => setEventVenue(e.target.value)} placeholder="Event venue" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" required />
                       </div>
                       <div className="flex gap-3 justify-end pt-2">
                         <button type="button" onClick={() => setShowEventModal(false)} className="px-5 py-2.5 bg-gray-100 text-gray-600 rounded-lg font-medium text-sm">Cancel</button>
-                        <button type="submit" className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-lg font-semibold text-sm">Create Event</button>
+                        <button type="submit" className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 text-white rounded-lg font-semibold text-sm">Create Event</button>
                       </div>
                     </form>
                   </div>
@@ -625,7 +625,7 @@ export default function AdminPage() {
                           <td className="px-4 py-3">
                             <div className="flex flex-wrap gap-1">
                               {v.interests.slice(0, 2).map((i) => (
-                                <span key={i} className="px-1.5 py-0.5 bg-blue-50 text-blue-600 text-[10px] rounded-md font-medium">
+                                <span key={i} className="px-1.5 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] rounded-md font-medium">
                                   {i.replace('_', ' ')}
                                 </span>
                               ))}
@@ -683,7 +683,7 @@ export default function AdminPage() {
                         <tr key={u.uid} className="hover:bg-gray-50">
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-2">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-teal-100 flex items-center justify-center text-blue-600 font-semibold text-xs">
+                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center text-emerald-600 font-semibold text-xs">
                                 {u.displayName?.charAt(0).toUpperCase() || 'U'}
                               </div>
                               <span className="font-medium text-gray-800">{u.displayName || '\u2014'}</span>
@@ -694,7 +694,7 @@ export default function AdminPage() {
                             <select
                               value={u.role}
                               onChange={(e) => handleRoleChange(u.uid, e.target.value)}
-                              className="px-2 py-1 border border-gray-200 rounded-lg text-xs outline-none focus:border-blue-500"
+                              className="px-2 py-1 border border-gray-200 rounded-lg text-xs outline-none focus:border-emerald-500"
                             >
                               <option value="volunteer">Volunteer</option>
                               <option value="admin">Admin</option>
@@ -722,7 +722,7 @@ export default function AdminPage() {
                 </div>
                 <button
                   onClick={() => setShowBannerModal(true)}
-                  className="px-4 py-2 bg-gradient-to-r from-blue-600 to-teal-500 text-white text-sm font-semibold rounded-lg flex items-center gap-1.5"
+                  className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-sm font-semibold rounded-lg flex items-center gap-1.5"
                 >
                   <FiPlus /> New Banner
                 </button>
@@ -733,7 +733,7 @@ export default function AdminPage() {
                   const count = banners.filter((b) => b.placement === p).length;
                   const activeCount = banners.filter((b) => b.placement === p && b.active).length;
                   const placementLabels = { hero: 'Hero Carousel', sidebar: 'Sidebar Ads', inline: 'Inline Strips', footer: 'Footer CTA' };
-                  const placementColors = { hero: 'text-purple-600', sidebar: 'text-blue-600', inline: 'text-emerald-600', footer: 'text-violet-600' };
+                  const placementColors = { hero: 'text-purple-600', sidebar: 'text-emerald-600', inline: 'text-emerald-600', footer: 'text-violet-600' };
                   return (
                     <div key={p} className="card p-5 text-center">
                       <div className={`text-2xl font-extrabold ${placementColors[p]}`}>{count}</div>
@@ -810,15 +810,15 @@ export default function AdminPage() {
                     <form onSubmit={handleAddBanner} className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Banner Title *</label>
-                        <input type="text" value={bannerTitle} onChange={(e) => setBannerTitle(e.target.value)} placeholder="Banner headline" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" required />
+                        <input type="text" value={bannerTitle} onChange={(e) => setBannerTitle(e.target.value)} placeholder="Banner headline" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" required />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Subtitle</label>
-                        <input type="text" value={bannerSubtitle} onChange={(e) => setBannerSubtitle(e.target.value)} placeholder="Supporting text" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" />
+                        <input type="text" value={bannerSubtitle} onChange={(e) => setBannerSubtitle(e.target.value)} placeholder="Supporting text" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Placement</label>
-                        <select value={bannerPlacement} onChange={(e) => setBannerPlacement(e.target.value as typeof bannerPlacement)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500">
+                        <select value={bannerPlacement} onChange={(e) => setBannerPlacement(e.target.value as typeof bannerPlacement)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500">
                           <option value="hero">Hero Carousel (Home page top)</option>
                           <option value="inline">Inline Strip (Between sections)</option>
                           <option value="sidebar">Sidebar (Ward detail pages)</option>
@@ -827,9 +827,9 @@ export default function AdminPage() {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Background Gradient</label>
-                        <select value={bannerGradient} onChange={(e) => setBannerGradient(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500">
+                        <select value={bannerGradient} onChange={(e) => setBannerGradient(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500">
                           <option value="from-violet-600 via-purple-600 to-indigo-700">Purple</option>
-                          <option value="from-blue-600 via-cyan-600 to-teal-500">Ocean</option>
+                          <option value="from-emerald-600 via-teal-600 to-cyan-500">Ocean</option>
                           <option value="from-emerald-500 to-teal-600">Green</option>
                           <option value="from-orange-500 to-red-500">Warm</option>
                           <option value="from-pink-500 to-rose-500">Pink</option>
@@ -841,11 +841,11 @@ export default function AdminPage() {
                       <div className="grid grid-cols-2 gap-3">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">CTA Button Text</label>
-                          <input type="text" value={bannerCta} onChange={(e) => setBannerCta(e.target.value)} placeholder="e.g. Learn More" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" />
+                          <input type="text" value={bannerCta} onChange={(e) => setBannerCta(e.target.value)} placeholder="e.g. Learn More" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" />
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">CTA Link</label>
-                          <input type="text" value={bannerLink} onChange={(e) => setBannerLink(e.target.value)} placeholder="/events or URL" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" />
+                          <input type="text" value={bannerLink} onChange={(e) => setBannerLink(e.target.value)} placeholder="/events or URL" className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" />
                         </div>
                       </div>
                       <div>
@@ -866,18 +866,18 @@ export default function AdminPage() {
                           <button
                             type="button"
                             onClick={() => bannerFileRef.current?.click()}
-                            className="w-full h-24 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 hover:border-blue-400 hover:text-blue-500 transition-colors mb-2"
+                            className="w-full h-24 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 hover:border-emerald-400 hover:text-emerald-500 transition-colors mb-2"
                           >
                             <FiImage className="text-xl mb-1" />
                             <span className="text-xs">Click to upload image</span>
                           </button>
                         )}
                         <p className="text-xs text-gray-400">Or paste an image URL:</p>
-                        <input type="text" value={bannerImageUrl} onChange={(e) => setBannerImageUrl(e.target.value)} placeholder="https://... or /images/banner.jpg" className="w-full mt-1 px-4 py-2 rounded-lg border border-gray-300 text-sm outline-none focus:border-blue-500" />
+                        <input type="text" value={bannerImageUrl} onChange={(e) => setBannerImageUrl(e.target.value)} placeholder="https://... or /images/banner.jpg" className="w-full mt-1 px-4 py-2 rounded-lg border border-gray-300 text-sm outline-none focus:border-emerald-500" />
                       </div>
                       <div className="flex gap-3 justify-end pt-2">
                         <button type="button" onClick={() => setShowBannerModal(false)} className="px-5 py-2.5 bg-gray-100 text-gray-600 rounded-lg font-medium text-sm">Cancel</button>
-                        <button type="submit" className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-lg font-semibold text-sm">Create Banner</button>
+                        <button type="submit" className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 text-white rounded-lg font-semibold text-sm">Create Banner</button>
                       </div>
                     </form>
                   </div>
@@ -896,15 +896,15 @@ export default function AdminPage() {
                   const wardActivities = activities.filter((a) => a.wardNumber === ward.number);
                   return (
                     <div key={ward.number} className="card p-6">
-                      <div className="text-2xl font-extrabold text-blue-600 mb-1">Ward {ward.number}</div>
+                      <div className="text-2xl font-extrabold text-emerald-600 mb-1">Ward {ward.number}</div>
                       <p className="text-sm text-gray-500 mb-3">{ward.name}</p>
                       <div className="p-3 bg-gray-50 rounded-lg mb-3">
                         <p className="text-sm font-semibold text-gray-700">{corp?.name || 'No representative'}</p>
                         <p className="text-xs text-gray-400">{corp?.party || '-'}</p>
                       </div>
                       <div className="grid grid-cols-2 gap-2 text-center text-xs">
-                        <div className="p-2 bg-blue-50 rounded-lg">
-                          <div className="font-bold text-blue-600">{wardActivities.length}</div>
+                        <div className="p-2 bg-emerald-50 rounded-lg">
+                          <div className="font-bold text-emerald-600">{wardActivities.length}</div>
                           <div className="text-gray-400">Activities</div>
                         </div>
                         <div className="p-2 bg-teal-50 rounded-lg">
@@ -929,15 +929,15 @@ export default function AdminPage() {
                   <div className="space-y-3">
                     <div>
                       <label className="block text-sm text-gray-500 mb-1">Platform Name</label>
-                      <input type="text" defaultValue="OneMalad.in" className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-blue-500" />
+                      <input type="text" defaultValue="OneMalad.in" className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-emerald-500" />
                     </div>
                     <div>
                       <label className="block text-sm text-gray-500 mb-1">Contact Email</label>
-                      <input type="email" defaultValue="onemaladconnect@gmail.com" className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-blue-500" />
+                      <input type="email" defaultValue="onemaladconnect@gmail.com" className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-emerald-500" />
                     </div>
                     <div>
                       <label className="block text-sm text-gray-500 mb-1">Contact Phone</label>
-                      <input type="text" defaultValue="+91 99207 66971" className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-blue-500" />
+                      <input type="text" defaultValue="+91 99207 66971" className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-emerald-500" />
                     </div>
                   </div>
                 </div>
@@ -947,12 +947,12 @@ export default function AdminPage() {
                     {['Twitter/X', 'Instagram', 'Facebook', 'YouTube'].map((platform) => (
                       <div key={platform}>
                         <label className="block text-sm text-gray-500 mb-1">{platform}</label>
-                        <input type="url" placeholder={`https://${platform.toLowerCase().replace('/', '')}.com/onemalad`} className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-blue-500" />
+                        <input type="url" placeholder={`https://${platform.toLowerCase().replace('/', '')}.com/onemalad`} className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm outline-none focus:border-emerald-500" />
                       </div>
                     ))}
                   </div>
                 </div>
-                <button className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-lg font-semibold text-sm">
+                <button className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 text-white rounded-lg font-semibold text-sm">
                   Save Settings
                 </button>
               </div>

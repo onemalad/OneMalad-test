@@ -45,7 +45,7 @@ export default function WardsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-8">
             <h2 className="text-xl font-bold text-gray-800">P-North & P-South Wards</h2>
-            <span className="text-xs font-medium bg-blue-50 text-blue-600 px-3 py-1 rounded-full">
+            <span className="text-xs font-medium bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full">
               {filtered.length} wards
             </span>
           </div>
@@ -69,7 +69,7 @@ export default function WardsPage() {
                           {corp.photo ? (
                             <img src={corp.photo} alt={corp.name} className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
                           ) : (
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-teal-100 flex items-center justify-center text-blue-600 font-semibold text-sm flex-shrink-0">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center text-emerald-600 font-semibold text-sm flex-shrink-0">
                               {corp.name.charAt(0)}
                             </div>
                           )}
@@ -82,7 +82,7 @@ export default function WardsPage() {
 
                       <div className="pt-3 border-t border-gray-100 grid grid-cols-2 gap-2">
                         <div className="text-center">
-                          <div className="flex items-center justify-center gap-1 text-blue-600">
+                          <div className="flex items-center justify-center gap-1 text-emerald-600">
                             <FiUsers className="text-xs" />
                             <span className="text-sm font-bold">{ward.population ? ward.population.toLocaleString('en-IN') : '\u2014'}</span>
                           </div>

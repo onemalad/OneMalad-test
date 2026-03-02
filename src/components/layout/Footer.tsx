@@ -9,11 +9,11 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 bg-gradient-to-br from-violet-600 via-blue-500 to-cyan-400 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-lg shadow-blue-500/25">
+              <div className="w-9 h-9 bg-gradient-to-br from-emerald-500 via-emerald-400 to-teal-400 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-lg shadow-emerald-500/25">
                 1
               </div>
               <div>
-                <span className="text-lg font-black text-white">One<span className="text-cyan-300">Malad</span></span>
+                <span className="text-lg font-black text-white">One<span className="text-emerald-300">Malad</span></span>
                 <span className="block text-[9px] font-semibold tracking-[0.2em] uppercase text-white/40">Community Foundation</span>
               </div>
             </div>
@@ -31,7 +31,7 @@ export default function Footer() {
                 <a
                   key={i}
                   href={social.href}
-                  className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition-all"
+                  className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:bg-emerald-600 hover:text-white transition-all"
                 >
                   <social.icon />
                 </a>
@@ -49,9 +49,12 @@ export default function Footer() {
                 { label: 'Events', href: '/events' },
                 { label: 'Gallery', href: '/gallery' },
                 { label: 'Volunteer', href: '/volunteer' },
+                { label: 'Business Directory', href: '/directory' },
+                { label: 'Emergency Helplines', href: '/helplines' },
+                { label: 'Blood Donors', href: '/blood-donors' },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm hover:text-blue-400 transition-colors">
+                  <Link href={link.href} className="text-sm hover:text-emerald-400 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -71,7 +74,7 @@ export default function Footer() {
                 { label: 'P South Ward 49', href: '/wards/49' },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm hover:text-blue-400 transition-colors">
+                  <Link href={link.href} className="text-sm hover:text-emerald-400 transition-colors">
                     {link.label}
                   </Link>
                 </li>

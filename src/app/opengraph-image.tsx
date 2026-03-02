@@ -10,7 +10,7 @@ export default async function Image() {
     (
       <div
         style={{
-          background: 'linear-gradient(135deg, #1e3a5f 0%, #0f172a 50%, #1e293b 100%)',
+          background: 'linear-gradient(135deg, #064e3b 0%, #0f172a 50%, #1e293b 100%)',
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -61,7 +61,7 @@ export default async function Image() {
               width: '64px',
               height: '64px',
               borderRadius: '16px',
-              background: 'linear-gradient(135deg, #2563eb, #14b8a6)',
+              background: 'linear-gradient(135deg, #059669, #14b8a6)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -122,7 +122,7 @@ export default async function Image() {
                 border: '1px solid rgba(255,255,255,0.1)',
               }}
             >
-              <span style={{ color: '#38bdf8', fontSize: '36px', fontWeight: 800 }}>{stat.num}</span>
+              <span style={{ color: '#34d399', fontSize: '36px', fontWeight: 800 }}>{stat.num}</span>
               <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>{stat.label}</span>
             </div>
           ))}
@@ -136,7 +136,7 @@ export default async function Image() {
             left: '0',
             right: '0',
             height: '4px',
-            background: 'linear-gradient(90deg, #2563eb, #14b8a6, #38bdf8)',
+            background: 'linear-gradient(90deg, #059669, #14b8a6, #34d399)',
             display: 'flex',
           }}
         />

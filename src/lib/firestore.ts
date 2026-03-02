@@ -3,7 +3,7 @@ import {
   collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc,
   query, orderBy, where, onSnapshot,
 } from 'firebase/firestore';
-import { Activity, CommunityEvent, Volunteer, GalleryImage, ImpactStat } from '@/types';
+import { Activity, CommunityEvent, Volunteer, GalleryImage, ImpactStat, BloodDonor } from '@/types';
 
 // Check if Firebase is configured with real values
 export const isFirebaseConfigured = () => {
@@ -148,6 +148,30 @@ export async function createGalleryImageInFirestore(image: Omit<GalleryImage, 'i
 
 export async function deleteGalleryImageFromFirestore(id: string) {
   await deleteDoc(doc(db, 'gallery', id));
+}
+
+// --- Blood Donors ---
+export function subscribeToBloodDonors(callback: (donors: BloodDonor[]) => void) {
+  const q = query(collection(db, 'bloodDonors'), orderBy('createdAt', 'desc'));
+  return onSnapshot(q, (snapshot) => {
+    const donors = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as BloodDonor));
+    callback(donors);
+  }, (error) => {
+    console.error('Firestore blood donors listener error:', error);
+  });
+}
+
+export async function createBloodDonorInFirestore(donor: Omit<BloodDonor, 'id'>): Promise<string> {
+  const docRef = await addDoc(collection(db, 'bloodDonors'), donor);
+  return docRef.id;
+}
+
+export async function updateBloodDonorInFirestore(id: string, data: Partial<BloodDonor>) {
+  await updateDoc(doc(db, 'bloodDonors', id), data);
+}
+
+export async function deleteBloodDonorFromFirestore(id: string) {
+  await deleteDoc(doc(db, 'bloodDonors', id));
 }
 
 // --- Corporator Support ("I Support" feature) ---

@@ -92,6 +92,56 @@ export interface GalleryImage {
   createdAt: string;
 }
 
+export type BusinessCategory =
+  | 'restaurant'
+  | 'grocery'
+  | 'medical'
+  | 'education'
+  | 'salon'
+  | 'electronics'
+  | 'clothing'
+  | 'hardware'
+  | 'services'
+  | 'other';
+
+export interface Business {
+  id: string;
+  name: string;
+  category: BusinessCategory;
+  description: string;
+  address: string;
+  wardNumber: number;
+  phone?: string;
+  whatsapp?: string;
+  timing?: string;
+  rating?: number;
+}
+
+export type HelplineCategory = 'emergency' | 'hospital' | 'police' | 'fire' | 'municipal' | 'women' | 'child' | 'utility' | 'other';
+
+export interface Helpline {
+  id: string;
+  name: string;
+  number: string;
+  category: HelplineCategory;
+  description?: string;
+  available?: string;
+}
+
+export type BloodGroup = 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
+
+export interface BloodDonor {
+  id: string;
+  name: string;
+  phone: string;
+  bloodGroup: BloodGroup;
+  wardNumber?: number;
+  age?: number;
+  lastDonation?: string;
+  createdAt: string;
+  isAvailable: boolean;
+}
+
 export type EventCategory = 'social' | 'cultural' | 'sports' | 'education' | 'health' | 'cleanliness' | 'environment' | 'other';
 
 export interface CommunityEvent {

@@ -1,5 +1,24 @@
 import { Ward, Corporator } from '@/types';
 
+// WhatsApp group invite links for each ward
+export const wardWhatsAppGroups: Record<number, { label: string; url: string }[]> = {
+  32: [
+    { label: 'Ward 32 — Marve & Manori Community', url: 'https://chat.whatsapp.com/ward32malad' },
+  ],
+  33: [
+    { label: 'Ward 33 — Rathodi & Malwani 6 No Community', url: 'https://chat.whatsapp.com/ward33malad' },
+  ],
+  34: [
+    { label: 'Ward 34 — Malwani Gate 6/7 Community', url: 'https://chat.whatsapp.com/ward34malad' },
+  ],
+  48: [
+    { label: 'Ward 48 — MHADA & Malwani 7 No Community', url: 'https://chat.whatsapp.com/ward48malad' },
+  ],
+  49: [
+    { label: 'Ward 49 — Madh Island & Ambujwadi Community', url: 'https://chat.whatsapp.com/ward49malad' },
+  ],
+};
+
 export const wardsData: Ward[] = [
   {
     number: 32,
