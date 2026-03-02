@@ -1,8 +1,18 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FiArrowRight, FiMapPin, FiUsers, FiCheckCircle, FiCalendar, FiHeart } from 'react-icons/fi';
+import { FiArrowRight, FiMapPin, FiUsers, FiCheckCircle, FiCalendar, FiHeart, FiZap } from 'react-icons/fi';
 import { HiOutlineLocationMarker, HiOutlineSparkles } from 'react-icons/hi';
+
+const heroRotatingTexts = [
+  'Cleaning beaches across Malad',
+  'Distributing meals to 500+ families',
+  'Organizing free health checkups',
+  'Planting trees in every ward',
+  'Empowering youth through education',
+  'Running blood donation drives',
+];
 import { wardsData, corporatorsData } from '@/data/wards';
 import { useStore } from '@/hooks/useStore';
 
@@ -85,6 +95,20 @@ export default function HomePage() {
 
   const quote = getDailyQuote();
 
+  // Rotating hero text
+  const [heroTextIndex, setHeroTextIndex] = useState(0);
+  const [fadeIn, setFadeIn] = useState(true);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFadeIn(false);
+      setTimeout(() => {
+        setHeroTextIndex((prev) => (prev + 1) % heroRotatingTexts.length);
+        setFadeIn(true);
+      }, 300);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       {/* 1. Hero Section — Bright & Modern */}
@@ -100,9 +124,11 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-[1fr_420px] gap-12 lg:gap-16 items-center">
             {/* Left — Content */}
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-full border border-emerald-200 mb-7">
-                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-sm font-semibold text-emerald-700">Serving Malad Wards 32, 33, 34, 48, 49</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-full border border-emerald-200/60 mb-7 shadow-sm">
+                <FiZap className="text-amber-500 text-sm" />
+                <span className={`text-sm font-semibold text-emerald-700 transition-all duration-300 ${fadeIn ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'}`}>
+                  {heroRotatingTexts[heroTextIndex]}
+                </span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold leading-[1.08] mb-6 text-gray-900">
